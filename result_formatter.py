@@ -1,0 +1,91 @@
+import json
+
+
+# function to extract the schema order for each query from the ground truth data predictions
+def build_schema_map(schema_file):
+
+    with open(schema_file, 'r') as f:
+        schema_data = json.load(f)
+
+    schema_map = {}
+
+    for item in schema_data:
+
+        nl = item["nl"]
+        predictions = item.get("prediction", item.get("predictions", []))
+
+        if not predictions:
+            schema_map[nl] = []
+            continue
+
+
+        if isinstance(predictions, list):
+            first_row = predictions[0] if predictions else {}
+        elif isinstance(predictions, dict):
+            first_row = predictions
+        else:
+            first_row = {}
+
+        schema_order = [k.upper() for k in first_row.keys()]
+
+        schema_map[nl] = schema_order
+
+    return schema_map
+
+
+
+def normalize_keys(row):
+    return {k.upper(): v for k, v in row.items()}
+
+
+
+def order_row(row, schema_order):
+
+    row = normalize_keys(row)
+
+    ordered = []
+
+    for attr in schema_order:
+        value = row.get(attr)
+
+        if value is None:
+            ordered.append("NULL")
+        else:
+            ordered.append(str(value))
+
+    return ordered
+
+
+# function to reorder the keys of the SQL query results according to the schema order extracted from the ground truth data
+def reorder_file(input_file, schema_file):
+
+    with open(input_file, 'r') as f:
+        data = json.load(f)
+
+    schema_map = build_schema_map(schema_file)
+    new_data = []
+
+    for item in data:
+
+        nl = item["nl"]
+
+        llama = item.get("llama", [])
+        gpt = item.get("gpt", [])
+
+        # if the predictions are not lists (e.g., in case of errors), we set them to empty lists to avoid issues during reordering
+        llama = llama if isinstance(llama, list) else []
+        gpt = gpt if isinstance(gpt, list) else []
+
+        schema_order = schema_map.get(nl, [])
+
+        ordered_llama = [order_row(row, schema_order) for row in llama if isinstance(row, dict)]
+
+        ordered_gpt = [order_row(row, schema_order) for row in gpt if isinstance(row, dict)]
+
+        new_data.append({
+            "nl": nl,
+            "llama": ordered_llama,
+            "gpt": ordered_gpt
+        })
+
+    return new_data
