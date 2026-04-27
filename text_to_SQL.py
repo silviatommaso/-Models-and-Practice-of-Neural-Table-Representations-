@@ -7,7 +7,7 @@ from schema_reader import get_schema
 from llm_requests import text_to_sql_prompt
 from sql_normalizer import normalize_sql, normalize_ground_truth
 from sql_questioning import execute_llm_queries, execute_ground_truth_queries
-from result_formatter import reorder_file
+from result_formatter import reorder_file, to_tuple_format
 
 
 load_dotenv()
@@ -126,16 +126,25 @@ db_path = os.getenv("DB__WAREHOUSE_1_PATH")
 
 #############################################################################################################################################################################################################################################################
 # # - Normalize the keys of the SQL query results and reorder them according to the schema order extracted from the ground truth data, to ensure a fair comparison between the predicted results and the ground truth results.
-output = reorder_file("json/warehouse_1/warehouse1_sqlite_response.json", "json/warehouse_1/warehouse1_ground_truth_sqlite_response.json")
+# output = reorder_file("json/warehouse_1/warehouse1_sqlite_response.json", "json/warehouse_1/warehouse1_ground_truth_sqlite_response.json")
 
-with open("json/warehouse_1/warehouse1_sqlite_response_reordered.json", "w") as f:
-    json.dump(output, f, indent=4)
+# with open("json/warehouse_1/warehouse1_sqlite_tuples.json", "w") as f:
+#     json.dump(output, f, indent=4)
 #############################################################################################################################################################################################################################################################
 
 #########################################################################################################################################################
-# # - Transform the ground truth list of dictionaries into a list of tuples (nl, sql) for easier comparison with the predicted results.
-# output = reorder_file("json/warehouse_1/warehouse1_sqlite_response.json", "json/warehouse_1/warehouse1_ground_truth_sqlite_response.json")
+# # - Transforming the ground truth into a list of tuples
+# output = to_tuple_format("json/warehouse_1/warehouse1_ground_truth_sqlite_response.json")
 
-# with open("json/warehouse_1/warehouse1_sqlite_response_reordered.json", "w") as f:
+# with open("json/warehouse_1/warehouse1_ground_truth_tuples.json", "w") as f:
+#     json.dump(output, f, indent=4)
+#########################################################################################################################################################
+
+
+#########################################################################################################################################################
+# # - Comparing the groundtruth and the predicted results
+# output = to_tuple_format("json/warehouse_1/warehouse1_ground_truth_sqlite_response.json")
+
+# with open("json/warehouse_1/warehouse1_ground_truth_tuples.json", "w") as f:
 #     json.dump(output, f, indent=4)
 #########################################################################################################################################################

@@ -89,3 +89,34 @@ def reorder_file(input_file, schema_file):
         })
 
     return new_data
+
+
+
+# function to convert the predictions from list of dicts format to list of tuples format, handling also the case of errors where the prediction is a dict instead of a list of dicts
+def to_tuple_format(input_file):
+
+    with open(input_file, 'r') as f:
+        data = json.load(f)
+
+    new_data = []
+
+    for item in data:
+
+        nl = item["nl"]
+        prediction = item.get("prediction", [])
+
+        # caso errore
+        if isinstance(prediction, dict):
+            new_prediction = prediction
+        else:
+            new_prediction = [
+                tuple(str(v) if v is not None else "NULL" for v in row.values())
+                for row in prediction
+            ]
+
+        new_data.append({
+            "nl": nl,
+            "prediction": new_prediction
+        })
+
+    return new_data
