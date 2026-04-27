@@ -1,0 +1,685 @@
+[
+    {
+        "nl": "List of books, the publication year of each of them and their authors, ordered by publication year",
+        "llama": [
+            [
+                "NULL"
+            ],
+            [
+                "NULL"
+            ],
+            [
+                "NULL"
+            ],
+            [
+                "NULL"
+            ],
+            [
+                "NULL"
+            ],
+            [
+                "NULL"
+            ],
+            [
+                "NULL"
+            ]
+        ],
+        "gpt": []
+    },
+    {
+        "nl": "List of books that were published before 01-01-2000.",
+        "llama": [],
+        "gpt": []
+    },
+    {
+        "nl": "List of clients that have bought at least one book.",
+        "llama": [
+            [
+                "NULL",
+                "James Smith"
+            ],
+            [
+                "NULL",
+                "Laura Jones"
+            ],
+            [
+                "NULL",
+                "Rose Johnson"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton"
+            ],
+            [
+                "NULL",
+                "Peter Doe"
+            ]
+        ],
+        "gpt": [
+            [
+                "0000001",
+                "James Smith"
+            ],
+            [
+                "0000002",
+                "Laura Jones"
+            ],
+            [
+                "0000004",
+                "Rose Johnson"
+            ],
+            [
+                "0000005",
+                "Joseph Clinton"
+            ],
+            [
+                "0000003",
+                "Peter Doe"
+            ]
+        ]
+    },
+    {
+        "nl": "List of clients that bought the book whose ISBN= 4554672899910.",
+        "llama": [
+            [
+                "NULL",
+                "Laura Jones"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton"
+            ]
+        ],
+        "gpt": [
+            [
+                "0000002",
+                "Laura Jones"
+            ],
+            [
+                "0000005",
+                "Joseph Clinton"
+            ]
+        ]
+    },
+    {
+        "nl": "List of clients whose name contains  \u2018Jo\u2019 and the books that they have bought.",
+        "llama": [
+            [
+                "NULL",
+                "Laura Jones",
+                "The Republic"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "The Republic"
+            ],
+            [
+                "NULL",
+                "Laura Jones",
+                "The Hobbit"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "The Hobbit"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "The Little Prince"
+            ],
+            [
+                "NULL",
+                "Laura Jones",
+                "Pride and Prejudice"
+            ],
+            [
+                "NULL",
+                "Rose Johnson",
+                "Pride and Prejudice"
+            ]
+        ],
+        "gpt": [
+            [
+                "NULL",
+                "Laura Jones",
+                "The Republic"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "The Republic"
+            ],
+            [
+                "NULL",
+                "Laura Jones",
+                "The Hobbit"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "The Hobbit"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "The Little Prince"
+            ],
+            [
+                "NULL",
+                "Laura Jones",
+                "Pride and Prejudice"
+            ],
+            [
+                "NULL",
+                "Rose Johnson",
+                "Pride and Prejudice"
+            ]
+        ]
+    },
+    {
+        "nl": "List of clients that have bought at least a book whose price is greater than 10.",
+        "llama": [
+            [
+                "NULL",
+                "Laura Jones"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton"
+            ],
+            [
+                "NULL",
+                "James Smith"
+            ],
+            [
+                "NULL",
+                "Rose Johnson"
+            ],
+            [
+                "NULL",
+                "Peter Doe"
+            ]
+        ],
+        "gpt": [
+            [
+                "0000002",
+                "Laura Jones"
+            ],
+            [
+                "0000005",
+                "Joseph Clinton"
+            ],
+            [
+                "0000001",
+                "James Smith"
+            ],
+            [
+                "0000004",
+                "Rose Johnson"
+            ],
+            [
+                "0000003",
+                "Peter Doe"
+            ]
+        ]
+    },
+    {
+        "nl": "List of clients that have placed more than one order in the same date.",
+        "llama": [],
+        "gpt": [
+            [
+                "NULL"
+            ]
+        ]
+    },
+    {
+        "nl": "List of clients and dates in which they have placed orders that have not been sent yet.",
+        "llama": [
+            [
+                "NULL",
+                "James Smith",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "James Smith",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Laura Jones",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Rose Johnson",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Peter Doe",
+                "NULL"
+            ]
+        ],
+        "gpt": [
+            [
+                "NULL",
+                "James Smith",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "James Smith",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Laura Jones",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Rose Johnson",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Peter Doe",
+                "NULL"
+            ]
+        ]
+    },
+    {
+        "nl": "List of clients that have not bought books whose price is greater than 10.",
+        "llama": [
+            [
+                "NULL",
+                "Betty Fraser"
+            ]
+        ],
+        "gpt": [
+            [
+                "0000006",
+                "Betty Fraser"
+            ]
+        ]
+    },
+    {
+        "nl": "List of books whose sale price is greater than 30\u20ac or that were published before 2000.",
+        "llama": [],
+        "gpt": []
+    },
+    {
+        "nl": "List of books and amount of copies of each of them that have been sold.",
+        "llama": [
+            [
+                "Pride and Prejudice",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Little Prince",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Little Prince",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "Pride and Prejudice",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "Lolita",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Hobbit",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "Pride and Prejudice",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Republic",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "Pride and Prejudice",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Hobbit",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Republic",
+                "NULL",
+                "NULL"
+            ]
+        ],
+        "gpt": [
+            [
+                "Lolita",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "Pride and Prejudice",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Hobbit",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Little Prince",
+                "NULL",
+                "NULL"
+            ],
+            [
+                "The Republic",
+                "NULL",
+                "NULL"
+            ]
+        ]
+    },
+    {
+        "nl": "List of clients and the total amount that they have spent in the bookstore.",
+        "llama": [
+            [
+                "NULL",
+                "James Smith",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Joseph Clinton",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Laura Jones",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Peter Doe",
+                "NULL"
+            ],
+            [
+                "NULL",
+                "Rose Johnson",
+                "NULL"
+            ]
+        ],
+        "gpt": [
+            [
+                "0000001",
+                "James Smith",
+                "NULL"
+            ],
+            [
+                "0000002",
+                "Laura Jones",
+                "NULL"
+            ],
+            [
+                "0000003",
+                "Peter Doe",
+                "NULL"
+            ],
+            [
+                "0000004",
+                "Rose Johnson",
+                "NULL"
+            ],
+            [
+                "0000005",
+                "Joseph Clinton",
+                "NULL"
+            ]
+        ]
+    },
+    {
+        "nl": "Profits obtained from sales of books.",
+        "llama": [
+            [
+                "NULL"
+            ]
+        ],
+        "gpt": [
+            [
+                "NULL"
+            ]
+        ]
+    },
+    {
+        "nl": "Orders whose total amount is greater than 100.",
+        "llama": [],
+        "gpt": []
+    },
+    {
+        "nl": "Orders and the total amount of each of them that contains more than a book (title).",
+        "llama": [
+            [
+                "0000001P",
+                "NULL"
+            ],
+            [
+                "0000003P",
+                "NULL"
+            ],
+            [
+                "0000005P",
+                "NULL"
+            ]
+        ],
+        "gpt": [
+            [
+                "0000001P",
+                "NULL"
+            ],
+            [
+                "0000003P",
+                "NULL"
+            ],
+            [
+                "0000005P",
+                "NULL"
+            ]
+        ]
+    },
+    {
+        "nl": "Orders and the total amount of each of them that contains more than 4 copies",
+        "llama": [
+            [
+                "0000005P",
+                "NULL"
+            ],
+            [
+                "0000006P",
+                "NULL"
+            ]
+        ],
+        "gpt": [
+            [
+                "0000005P",
+                "NULL"
+            ],
+            [
+                "0000006P",
+                "NULL"
+            ]
+        ]
+    },
+    {
+        "nl": "List of the most expensive books.",
+        "llama": [
+            [
+                "NULL",
+                "The Little Prince",
+                "73.45"
+            ],
+            [
+                "NULL",
+                "The Hobbit",
+                "33.15"
+            ],
+            [
+                "NULL",
+                "1984",
+                "19.25"
+            ],
+            [
+                "NULL",
+                "The Republic",
+                "15.75"
+            ],
+            [
+                "NULL",
+                "Pride and Prejudice",
+                "13.45"
+            ],
+            [
+                "NULL",
+                "Dracula",
+                "13.45"
+            ],
+            [
+                "NULL",
+                "Lolita",
+                "9.45"
+            ]
+        ],
+        "gpt": [
+            [
+                "5463467723747",
+                "The Little Prince",
+                "73.45"
+            ],
+            [
+                "4554672899910",
+                "The Hobbit",
+                "33.15"
+            ],
+            [
+                "1235271378662",
+                "1984",
+                "19.25"
+            ],
+            [
+                "1243415243666",
+                "The Republic",
+                "15.75"
+            ],
+            [
+                "8233771378567",
+                "Pride and Prejudice",
+                "13.45"
+            ],
+            [
+                "0853477468299",
+                "Dracula",
+                "13.45"
+            ],
+            [
+                "0482174555366",
+                "Lolita",
+                "9.45"
+            ]
+        ]
+    },
+    {
+        "nl": "List of books that have not been sold or that have been sold but the profit per copy is less than 5",
+        "llama": [
+            [
+                "8233771378567",
+                "Pride and Prejudice"
+            ],
+            [
+                "8233771378567",
+                "Pride and Prejudice"
+            ],
+            [
+                "8233771378567",
+                "Pride and Prejudice"
+            ],
+            [
+                "8233771378567",
+                "Pride and Prejudice"
+            ],
+            [
+                "1235271378662",
+                "1984"
+            ],
+            [
+                "0853477468299",
+                "Dracula"
+            ]
+        ],
+        "gpt": [
+            [
+                "8233771378567",
+                "Pride and Prejudice"
+            ],
+            [
+                "1235271378662",
+                "1984"
+            ],
+            [
+                "0853477468299",
+                "Dracula"
+            ]
+        ]
+    },
+    {
+        "nl": "List of clients that have bought more than one copy of a book sometime",
+        "llama": [
+            [
+                "James Smith"
+            ],
+            [
+                "Joseph Clinton"
+            ],
+            [
+                "Peter Doe"
+            ]
+        ],
+        "gpt": [
+            [
+                "James Smith"
+            ],
+            [
+                "Joseph Clinton"
+            ],
+            [
+                "Peter Doe"
+            ]
+        ]
+    }
+]

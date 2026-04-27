@@ -1,0 +1,337 @@
+[
+    {
+        "nl": "List of books, the publication year of each of them and their authors, ordered by publication year",
+        "prediction": {
+            "error": "no such column: A\u00d1O"
+        }
+    },
+    {
+        "nl": "List of books that were published before 01-01-2000.",
+        "prediction": {
+            "error": "no such column: A\u00d1O"
+        }
+    },
+    {
+        "nl": "List of clients that have bought at least one book.",
+        "prediction": [
+            {
+                "IdClient": "0000001",
+                "Name": "James Smith"
+            },
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones"
+            },
+            {
+                "IdClient": "0000004",
+                "Name": "Rose Johnson"
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton"
+            },
+            {
+                "IdClient": "0000003",
+                "Name": "Peter Doe"
+            }
+        ]
+    },
+    {
+        "nl": "List of clients that bought the book whose ISBN= 4554672899910.",
+        "prediction": [
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones"
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton"
+            }
+        ]
+    },
+    {
+        "nl": "List of clients whose name contains  \u2018Jo\u2019 and the books that they have bought.",
+        "prediction": [
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones",
+                "Title": "The Republic"
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton",
+                "Title": "The Republic"
+            },
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones",
+                "Title": "The Hobbit"
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton",
+                "Title": "The Hobbit"
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton",
+                "Title": "The Little Prince"
+            },
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones",
+                "Title": "Pride and Prejudice"
+            },
+            {
+                "IdClient": "0000004",
+                "Name": "Rose Johnson",
+                "Title": "Pride and Prejudice"
+            }
+        ]
+    },
+    {
+        "nl": "List of clients that have bought at least a book whose price is greater than 10.",
+        "prediction": [
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones"
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton"
+            },
+            {
+                "IdClient": "0000001",
+                "Name": "James Smith"
+            },
+            {
+                "IdClient": "0000004",
+                "Name": "Rose Johnson"
+            },
+            {
+                "IdClient": "0000003",
+                "Name": "Peter Doe"
+            }
+        ]
+    },
+    {
+        "nl": "List of clients that have placed more than one order in the same date.",
+        "prediction": {
+            "error": "row value misused"
+        }
+    },
+    {
+        "nl": "List of clients and dates in which they have placed orders that have not been sent yet.",
+        "prediction": [
+            {
+                "IdClient": "0000001",
+                "Name": "James Smith",
+                "DateOrder": null
+            },
+            {
+                "IdClient": "0000001",
+                "Name": "James Smith",
+                "DateOrder": null
+            },
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones",
+                "DateOrder": null
+            },
+            {
+                "IdClient": "0000004",
+                "Name": "Rose Johnson",
+                "DateOrder": null
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton",
+                "DateOrder": null
+            },
+            {
+                "IdClient": "0000003",
+                "Name": "Peter Doe",
+                "DateOrder": null
+            }
+        ]
+    },
+    {
+        "nl": "List of clients that have not bought books whose price is greater than 10.",
+        "prediction": [
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones"
+            },
+            {
+                "IdClient": "0000003",
+                "Name": "Peter Doe"
+            },
+            {
+                "IdClient": "0000004",
+                "Name": "Rose Johnson"
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton"
+            },
+            {
+                "IdClient": "0000006",
+                "Name": "Betty Fraser"
+            }
+        ]
+    },
+    {
+        "nl": "List of books whose sale price is greater than 30\u20ac or that were published before 2000.",
+        "prediction": {
+            "error": "no such column: A\u00d1O"
+        }
+    },
+    {
+        "nl": "List of books and amount of copies of each of them that have been sold.",
+        "prediction": [
+            {
+                "Title": "Pride and Prejudice",
+                "ISBN": "8233771378567",
+                "SUM(AMOUNT)": 8
+            },
+            {
+                "Title": "The Little Prince",
+                "ISBN": "5463467723747",
+                "SUM(AMOUNT)": 5
+            },
+            {
+                "Title": "The Hobbit",
+                "ISBN": "4554672899910",
+                "SUM(AMOUNT)": 2
+            },
+            {
+                "Title": "The Republic",
+                "ISBN": "1243415243666",
+                "SUM(AMOUNT)": 2
+            },
+            {
+                "Title": "Lolita",
+                "ISBN": "0482174555366",
+                "SUM(AMOUNT)": 1
+            }
+        ]
+    },
+    {
+        "nl": "List of clients and the total amount that they have spent in the bookstore.",
+        "prediction": [
+            {
+                "IdClient": "0000001",
+                "Name": "James Smith",
+                "TOTAL": 169.8
+            },
+            {
+                "IdClient": "0000002",
+                "Name": "Laura Jones",
+                "TOTAL": 62.349999999999994
+            },
+            {
+                "IdClient": "0000003",
+                "Name": "Peter Doe",
+                "TOTAL": 67.25
+            },
+            {
+                "IdClient": "0000004",
+                "Name": "Rose Johnson",
+                "TOTAL": 13.45
+            },
+            {
+                "IdClient": "0000005",
+                "Name": "Joseph Clinton",
+                "TOTAL": 269.25
+            }
+        ]
+    },
+    {
+        "nl": "Profits obtained from sales of books.",
+        "prediction": [
+            {
+                "TOTAL": 198.60000000000002
+            }
+        ]
+    },
+    {
+        "nl": "Orders whose total amount is greater than 100.",
+        "prediction": [
+            {
+                "IdOrder": "0000001P",
+                "TOTAL": 160.35
+            },
+            {
+                "IdOrder": "0000005P",
+                "TOTAL": 269.25
+            }
+        ]
+    },
+    {
+        "nl": "Orders and the total amount of each of them that contains more than a book (title).",
+        "prediction": [
+            {
+                "IdOrder": "0000001P",
+                "TOTAL": 160.35
+            },
+            {
+                "IdOrder": "0000003P",
+                "TOTAL": 62.349999999999994
+            },
+            {
+                "IdOrder": "0000005P",
+                "TOTAL": 269.25
+            }
+        ]
+    },
+    {
+        "nl": "Orders and the total amount of each of them that contains more than 4 copies",
+        "prediction": [
+            {
+                "IdOrder": "0000006P",
+                "TOTAL": 67.25
+            }
+        ]
+    },
+    {
+        "nl": "List of the most expensive books.",
+        "prediction": [
+            {
+                "ISBN": "5463467723747",
+                "Title": "The Little Prince",
+                "SalePrice": 73.45
+            }
+        ]
+    },
+    {
+        "nl": "List of books that have not been sold or that have been sold but the profit per copy is less than 5",
+        "prediction": [
+            {
+                "ISBN": "8233771378567",
+                "Title": "Pride and Prejudice"
+            },
+            {
+                "ISBN": "1235271378662",
+                "Title": "1984"
+            },
+            {
+                "ISBN": "0853477468299",
+                "Title": "Dracula"
+            }
+        ]
+    },
+    {
+        "nl": "List of clients that have bought more than one copy of a book sometime",
+        "prediction": [
+            {
+                "Name": "James Smith"
+            },
+            {
+                "Name": "Joseph Clinton"
+            },
+            {
+                "Name": "Peter Doe"
+            }
+        ]
+    }
+]
