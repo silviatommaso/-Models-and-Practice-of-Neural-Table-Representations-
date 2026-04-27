@@ -1,11 +1,4 @@
 import sqlite3
-import os
-from dotenv import load_dotenv
-
-
-load_dotenv()
-
-db_path = os.getenv("DB_PATH")
 
 
 #format the results of a SQL query into a list of dictionaries 
@@ -16,7 +9,7 @@ def format_results(cursor, rows):
 
 
 # function to execute the SQL queries from the ground truth file and return the results in a structured format
-def execute_ground_truth_queries(queries):
+def execute_ground_truth_queries(db_path, queries):
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -44,7 +37,7 @@ def execute_ground_truth_queries(queries):
 
 
 # function to execute LLM queries on the database and return the results in a structured format
-def execute_llm_queries(queries):
+def execute_llm_queries(db_path, queries):
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()

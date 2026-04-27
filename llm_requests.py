@@ -17,7 +17,18 @@ def call_llm(prompt, model_name):
         temperature=0
     )
 
-    return response.choices[0].message.content.strip()
+    usage = getattr(response, "usage", None)
+
+    if usage:
+        tokens = {
+            "prompt_tokens": usage.prompt_tokens,
+            "completion_tokens": usage.completion_tokens,
+            "total_tokens": usage.total_tokens
+        }
+    else:
+        tokens = None
+
+    return response.choices[0].message.content.strip(), tokens
 
 
 def text_to_sql_prompt(input_data):
@@ -50,11 +61,11 @@ def text_to_sql_prompt(input_data):
 
         try:
             start = time.time()
-            sql_llama = call_llm(prompt, "llama-3.3-70b-versatile")
+            sql_llama, tokens_llama = call_llm(prompt, "llama-3.3-70b-versatile")
             time_llama = time.time() - start
 
             start = time.time()
-            sql_gptoss = call_llm(prompt, "openai/gpt-oss-120b")
+            sql_gptoss, tokens_gptoss = call_llm(prompt, "openai/gpt-oss-120b")
             time_gptoss = time.time() - start
 
         except Exception as e:
@@ -74,6 +85,10 @@ def text_to_sql_prompt(input_data):
             "latency": {
                 "llama-3.3-70b-versatile": time_llama,
                 "gpt-oss-120b": time_gptoss
+            },
+            "tokens": {
+                "llama-3.3-70b-versatile": tokens_llama,
+                "gpt-oss-120b": tokens_gptoss
             }
         })
 

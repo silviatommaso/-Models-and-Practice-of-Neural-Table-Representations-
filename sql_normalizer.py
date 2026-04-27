@@ -1,13 +1,5 @@
 import re
-from dotenv import load_dotenv
-import os
 import json
-
-
-
-load_dotenv()
-
-ground_truth_path = os.getenv("ANNOTATION_PATH")
 
 
 def normalize_sql(sql):
@@ -41,7 +33,7 @@ def normalize_sql(sql):
 
 
 
-def normalize_ground_truth():
+def normalize_ground_truth(ground_truth_path):
 
     #open ground truth file
     if ground_truth_path is None:

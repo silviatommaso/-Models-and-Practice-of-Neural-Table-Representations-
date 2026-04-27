@@ -151,6 +151,7 @@ __pycache__/
 .env
 config.py
 spider_data/
+json/
 # .envrc
 # .venv
 # env/

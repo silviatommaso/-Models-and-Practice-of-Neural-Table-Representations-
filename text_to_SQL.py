@@ -1,4 +1,6 @@
 import json
+import os
+from dotenv import load_dotenv
 
 from annotation_parser import parse_annotations
 from schema_reader import get_schema
@@ -8,6 +10,9 @@ from sql_questioning import execute_llm_queries, execute_ground_truth_queries
 from result_formatter import reorder_file
 
 
+load_dotenv()
+file_path = os.getenv("WAREHOUSE_1_ANNOTATION_PATH")
+db_path = os.getenv("DB__WAREHOUSE_1_PATH")
 
 # ----------------------------------------------------------------------
 # # TEXT-TO-SQL PIPELINE:
@@ -18,17 +23,18 @@ from result_formatter import reorder_file
 # #       - queries
 # #       - sql
 
-# results = parse_annotations()
+# results = parse_annotations(file_path)
 ##########################################################################
 
 ##########################################################################
 # # - schema extraction from schema.sql 
+
 # for item in results:
 #     tables = item["tables"]
-#     schema = get_schema(tables)
+#     schema = get_schema(tables, db_path)
 #     item["table_schemas"] = schema
 
-# with open("json/book1_queries.json", "w") as f:
+# with open("json/warehouse_1/warehouse1_queries.json", "w") as f:
 #     json.dump(results, f, indent=4)
 ##########################################################################
 
@@ -49,13 +55,13 @@ from result_formatter import reorder_file
 #             item["predictions"][model]
 #         )
 
-# with open("json/book1_predictions.json", "w") as f:
+# with open("json/warehouse_1/warehouse1_predictions.json", "w") as f:
 #     json.dump(data, f, indent=4)
 ##########################################################################
 
 ##########################################################################
 # # - Execute the generated SQL queries on the database
-# with open("json/book1_predictions.json", 'r') as f:
+# with open("json/warehouse_1/warehouse1_predictions.json", 'r') as f:
 #     data = json.load(f)
 
 #     queries = []
@@ -67,9 +73,9 @@ from result_formatter import reorder_file
 #             "gpt_sql": item["predictions"].get("gpt-oss-120b", "")
 #         })
 
-# sqlite_results = execute_llm_queries(queries)
+# sqlite_results = execute_llm_queries(db_path, queries)
 
-# with open("json/book1_sqlite_response.json", "w") as f:
+# with open("json/warehouse_1/warehouse1_sqlite_response.json", "w") as f:
 #     json.dump(sqlite_results, f, indent=4)
 ###########################################################################
 
@@ -84,15 +90,15 @@ from result_formatter import reorder_file
 
 #################################################################################################################
 # # - Normalize the SQL queries in the annotations.json file to create a clean ground truth for evaluation.
-# ground_truth = normalize_ground_truth()
+# ground_truth = normalize_ground_truth(file_path)
 
-# with open("json/book1_ground_truth.json", "w") as f:
+# with open("json/warehouse_1/warehouse1_ground_truth.json", "w") as f:
 #     json.dump(ground_truth, f, indent=4)
 #################################################################################################################
 
 #################################################################################################################
 # # - After a manual review, execute the ground truth SQL queries on the database
-# with open("json/book1_ground_truth.json", 'r') as f:
+# with open("json/warehouse_1/warehouse1_ground_truth.json", 'r') as f:
 #     data = json.load(f)
 
 #     queries = []
@@ -103,9 +109,9 @@ from result_formatter import reorder_file
 #             "sql": item["sql"]
 #         })
 
-# sqlite_results = execute_ground_truth_queries(queries)
+# sqlite_results = execute_ground_truth_queries(db_path, queries)
 
-# with open("json/book1_ground_truth_sqlite_response.json", "w") as f:
+# with open("json/warehouse_1/warehouse1_ground_truth_sqlite_response.json", "w") as f:
 #     json.dump(sqlite_results, f, indent=4)
 ################################################################################################################
 
@@ -120,16 +126,16 @@ from result_formatter import reorder_file
 
 #############################################################################################################################################################################################################################################################
 # # - Normalize the keys of the SQL query results and reorder them according to the schema order extracted from the ground truth data, to ensure a fair comparison between the predicted results and the ground truth results.
-output = reorder_file("json/book1_sqlite_response.json", "json/book1_ground_truth_sqlite_response.json")
+output = reorder_file("json/warehouse_1/warehouse1_sqlite_response.json", "json/warehouse_1/warehouse1_ground_truth_sqlite_response.json")
 
-with open("json/book1_sqlite_response_reordered.json", "w") as f:
+with open("json/warehouse_1/warehouse1_sqlite_response_reordered.json", "w") as f:
     json.dump(output, f, indent=4)
 #############################################################################################################################################################################################################################################################
 
 #########################################################################################################################################################
 # # - Transform the ground truth list of dictionaries into a list of tuples (nl, sql) for easier comparison with the predicted results.
-# output = reorder_file("json/book1_sqlite_response.json", "json/book1_ground_truth_sqlite_response.json")
+# output = reorder_file("json/warehouse_1/warehouse1_sqlite_response.json", "json/warehouse_1/warehouse1_ground_truth_sqlite_response.json")
 
-# with open("json/book1_sqlite_response_reordered.json", "w") as f:
+# with open("json/warehouse_1/warehouse1_sqlite_response_reordered.json", "w") as f:
 #     json.dump(output, f, indent=4)
 #########################################################################################################################################################

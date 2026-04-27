@@ -1,11 +1,5 @@
-import os
-from dotenv import load_dotenv
 import json
 import re
-
-load_dotenv()
-
-file_path = os.getenv("ANNOTATION_PATH")
 
 
 def extract_tables(sql):
@@ -23,7 +17,7 @@ def extract_tables(sql):
     return list(tables)
 
 
-def parse_annotations():
+def parse_annotations(file_path):
 
     if file_path is None:
         raise ValueError("ANNOTATION_PATH environment variable not set")

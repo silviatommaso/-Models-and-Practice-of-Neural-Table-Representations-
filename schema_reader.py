@@ -1,12 +1,7 @@
 import sqlite3
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
 
-db_path = os.getenv("DB_PATH")
-
-def schema_reader(table):
+def schema_reader(table, db_path):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
@@ -20,11 +15,11 @@ def schema_reader(table):
     return [column[1] for column in columns]
 
 
-def get_schema(tables):
+def get_schema(tables, db_path):
     
     # Extract schema for each table
     schema = {}
     for table in tables:
-        schema[table] = schema_reader(table)
+        schema[table] = schema_reader(table, db_path)
     
     return schema
