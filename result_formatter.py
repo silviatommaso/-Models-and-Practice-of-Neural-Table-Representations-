@@ -78,9 +78,9 @@ def reorder_file(input_file, schema_file):
 
         schema_order = schema_map.get(nl, [])
 
-        ordered_llama = [order_row(row, schema_order) for row in llama if isinstance(row, dict)]
+        ordered_llama = [order_row(row, schema_order) for row in llama]
 
-        ordered_gpt = [order_row(row, schema_order) for row in gpt if isinstance(row, dict)]
+        ordered_gpt = [order_row(row, schema_order) for row in gpt]
 
         new_data.append({
             "nl": nl,

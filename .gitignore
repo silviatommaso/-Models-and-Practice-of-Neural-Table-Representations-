@@ -150,7 +150,8 @@ __pycache__/
 # Environments
 .env
 config.py
-spider_data/
+book_1/
+warehouse_1/
 json/
 # .envrc
 # .venv
