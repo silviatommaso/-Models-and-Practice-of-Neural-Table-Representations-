@@ -70,17 +70,25 @@ def evaluate(pred, gt):
     # 3. ORDER METRIC
     # -----------------------
 
-    tuple_llama_order = sum(
-        1 for i in range(min(len(pred_llama), len(gt_pred)))
-        if pred_llama[i] == gt_pred[i]
-    ) / len(gt_pred) if gt_pred else 0
+    # tuple corrette (senza considerare ordine)
+    correct_llama = tuple(row for row in pred_llama if row in gt_pred)
+    print(correct_gpt)
+    correct_gpt = tuple(row for row in pred_gpt if row in gt_pred)
 
-    tuple_gpt_order = sum(
-        1 for i in range(min(len(pred_gpt), len(gt_pred)))
-        if pred_gpt[i] == gt_pred[i]
-    ) / len(gt_pred) if gt_pred else 0
+    tuple_llama_order = (
+        sum(
+            1 for i in range(min(len(correct_llama), len(gt_pred)))
+            if correct_llama[i] == gt_pred[i]
+        ) / len(gt_pred)
+    ) if gt_pred else 0
 
 
+    tuple_gpt_order = (
+        sum(
+            1 for i in range(min(len(correct_gpt), len(gt_pred)))
+            if correct_gpt[i] == gt_pred[i]
+        ) / len(gt_pred)
+    ) if gt_pred else 0
     # -----------------------
     # RESULT
     # -----------------------

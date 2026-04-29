@@ -53,6 +53,13 @@ def order_row(row, schema_order):
         else:
             ordered.append(str(value))
 
+    
+    extra_attrs = [k for k in row.keys() if k not in schema_order]
+
+    for attr in extra_attrs:
+        value = row[attr]
+        ordered.append(str(value) if value is not None else "NULL")
+
     return ordered
 
 
@@ -77,6 +84,7 @@ def reorder_file(input_file, schema_file):
         gpt = gpt if isinstance(gpt, list) else []
 
         schema_order = schema_map.get(nl, [])
+
 
         ordered_llama = [order_row(row, schema_order) for row in llama]
 

@@ -24,24 +24,24 @@ db_path = os.getenv("DB__BOOK_1_PATH")
 # #       - queries
 # #       - sql
 
-results = parse_annotations(file_path)
+# results = parse_annotations(file_path)
 ##########################################################################
 
 ##########################################################################
 # # - schema extraction from schema.sql 
 
-for item in results:
-    tables = item["tables"]
-    schema = get_schema(tables, db_path)
-    # primary_keys = get_primary_keys(tables, db_path)
-    # foreign_keys = get_foreign_keys(tables, db_path)
+# for item in results:
+#     tables = item["tables"]
+#     schema = get_schema(tables, db_path)
+#     # primary_keys = get_primary_keys(tables, db_path)
+#     # foreign_keys = get_foreign_keys(tables, db_path)
 
-    item["table_schemas"] = schema
-    # item["primary_keys"] = primary_keys
-    # item["foreign_keys"] = foreign_keys
+#     item["table_schemas"] = schema
+#     # item["primary_keys"] = primary_keys
+#     # item["foreign_keys"] = foreign_keys
 
-with open("json/book_1/book1_queries_keys.json", "w") as f:
-    json.dump(results, f, indent=4)
+# with open("json/book_1/book1_queries.json", "w") as f:
+#     json.dump(results, f, indent=4)
 ##########################################################################
 
 ##########################################################################
@@ -131,7 +131,7 @@ with open("json/book_1/book1_queries_keys.json", "w") as f:
 
 #############################################################################################################################################################################################################################################################
 # # - Normalize the keys of the SQL query results and reorder them according to the schema order extracted from the ground truth data, to ensure a fair comparison between the predicted results and the ground truth results.
-# book1_sqlite_tuples = reorder_file("json/book_1/book1_sqlite_response.json", "json/book_1/book1_ground_truth_sqlite_response.json")
+book1_sqlite_tuples = reorder_file("json/book_1/book1_sqlite_response.json", "json/book_1/book1_ground_truth_sqlite_response.json")
 
 # with open("json/book_1/book1_sqlite_tuples.json", "w") as f:
 #     json.dump(book1_sqlite_tuples, f, indent=4)
@@ -139,7 +139,7 @@ with open("json/book_1/book1_queries_keys.json", "w") as f:
 
 #########################################################################################################################################################
 # # - Transforming the ground truth into a list of tuples
-# ground_truth_tuples = to_tuple_format("json/book_1/book1_ground_truth_sqlite_response.json")
+ground_truth_tuples = to_tuple_format("json/book_1/book1_ground_truth_sqlite_response.json")
 
 # with open("json/book_1/book1_ground_truth_tuples.json", "w") as f:
 #     json.dump(ground_truth_tuples, f, indent=4)
@@ -147,8 +147,8 @@ with open("json/book_1/book1_queries_keys.json", "w") as f:
 
 #########################################################################################################################################################
 # # - Comparing the groundtruth and the predicted results
-# evaluation = evaluate(book1_sqlite_tuples, ground_truth_tuples)
+evaluation = evaluate(book1_sqlite_tuples, ground_truth_tuples)
 
-# with open("json/book_1/book1_evaluation.json", "w") as f:
-#     json.dump(evaluation, f, indent=4)
+with open("json/book_1/book1_evaluation.json", "w") as f:
+    json.dump(evaluation, f, indent=4)
 #########################################################################################################################################################

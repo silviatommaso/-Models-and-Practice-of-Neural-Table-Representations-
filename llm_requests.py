@@ -50,8 +50,7 @@ def text_to_sql_prompt(input_data):
         - A natural language question (nl)
         - A list of relevant tables (tables)
         - The schema of those tables (table_schemas)
-        - The primary keys of those tables (primary_keys)
-        - The foreign keys of those tables (foreign_keys)
+        
 
 
         Rules:
@@ -63,9 +62,14 @@ def text_to_sql_prompt(input_data):
         nl: {nl}
         tables: {tables}
         schema: {table_schemas}
-        primary_keys: {primary_keys}
-        foreign_keys: {foreign_keys}
+        
         """
+
+        # - The primary keys of those tables (primary_keys)
+        # - The foreign keys of those tables (foreign_keys)
+
+        # primary_keys: {primary_keys}
+        # foreign_keys: {foreign_keys}
 
         try:
             start = time.time()
