@@ -12,8 +12,8 @@ from evaluation import evaluate
 
 
 load_dotenv()
-file_path = os.getenv("BOOK_1_ANNOTATION_PATH")
-db_path = os.getenv("DB__BOOK_1_PATH")
+file_path = os.getenv("WAREHOUSE_1_ANNOTATION_PATH")
+db_path = os.getenv("DB__WAREHOUSE_1_PATH")
 
 # ----------------------------------------------------------------------
 # # TEXT-TO-SQL PIPELINE:
@@ -40,7 +40,7 @@ for item in results:
     item["primary_keys"] = primary_keys
     item["foreign_keys"] = foreign_keys
 
-with open("json/book_1_keys/book1_queries.json", "w") as f:
+with open("json/warehouse_1_keys/warehouse1_queries.json", "w") as f:
     json.dump(results, f, indent=4)
 ##########################################################################
 
@@ -61,13 +61,13 @@ for item in data:
             item["predictions"][model]
         )
 
-with open("json/book_1_keys/book1_predictions.json", "w") as f:
+with open("json/warehouse_1_keys/warehouse1_predictions.json", "w") as f:
     json.dump(data, f, indent=4)
 ##########################################################################
 
 ##########################################################################
 # # - Execute the generated SQL queries on the database
-with open("json/book_1_keys/book1_predictions.json", 'r') as f:
+with open("json/warehouse_1_keys/warehouse1_predictions.json", 'r') as f:
     data = json.load(f)
 
     queries = []
@@ -81,7 +81,7 @@ with open("json/book_1_keys/book1_predictions.json", 'r') as f:
 
 sqlite_results = execute_llm_queries(db_path, queries)
 
-with open("json/book_1_keys/book1_sqlite_response.json", "w") as f:
+with open("json/warehouse_1_keys/warehouse1_sqlite_response.json", "w") as f:
     json.dump(sqlite_results, f, indent=4)
 ###########################################################################
 
@@ -98,7 +98,7 @@ with open("json/book_1_keys/book1_sqlite_response.json", "w") as f:
 # # - Normalize the SQL queries in the annotations.json file to create a clean ground truth for evaluation.
 ground_truth = normalize_ground_truth(file_path)
 
-with open("json/book_1_keys/book1_ground_truth.json", "w") as f:
+with open("json/warehouse_1_keys/warehouse1_ground_truth.json", "w") as f:
     json.dump(ground_truth, f, indent=4)
 #################################################################################################################
 
@@ -116,7 +116,7 @@ for item in data:
 
 sqlite_results = execute_ground_truth_queries(db_path, queries)
 
-with open("json/book_1_keys/book1_ground_truth_sqlite_response.json", "w") as f:
+with open("json/warehouse_1_keys/warehouse1_ground_truth_sqlite_response.json", "w") as f:
     json.dump(sqlite_results, f, indent=4)
 ################################################################################################################
 
@@ -131,7 +131,7 @@ with open("json/book_1_keys/book1_ground_truth_sqlite_response.json", "w") as f:
 
 #############################################################################################################################################################################################################################################################
 # # - Normalize the keys of the SQL query results and reorder them according to the schema order extracted from the ground truth data, to ensure a fair comparison between the predicted results and the ground truth results.
-book1_sqlite_tuples = reorder_file("json/book_1_keys/book1_sqlite_response.json", "json/book_1/book1_ground_truth_sqlite_response.json")
+book1_sqlite_tuples = reorder_file("json/warehouse_1_keys/warehouse1_sqlite_response.json", "json/warehouse_1_keys/warehouse1_ground_truth_sqlite_response.json")
 
 # with open("json/book_1/book1_sqlite_tuples.json", "w") as f:
 #     json.dump(book1_sqlite_tuples, f, indent=4)
@@ -139,7 +139,7 @@ book1_sqlite_tuples = reorder_file("json/book_1_keys/book1_sqlite_response.json"
 
 #########################################################################################################################################################
 # # - Transforming the ground truth into a list of tuples
-ground_truth_tuples = to_tuple_format("json/book_1_keys/book1_ground_truth_sqlite_response.json")
+ground_truth_tuples = to_tuple_format("json/warehouse_1_keys/warehouse1_ground_truth_sqlite_response.json")
 
 # with open("json/book_1/book1_ground_truth_tuples.json", "w") as f:
 #     json.dump(ground_truth_tuples, f, indent=4)
@@ -149,6 +149,6 @@ ground_truth_tuples = to_tuple_format("json/book_1_keys/book1_ground_truth_sqlit
 # # - Comparing the groundtruth and the predicted results
 evaluation = evaluate(book1_sqlite_tuples, ground_truth_tuples)
 
-with open("json/book_1_keys/book1_evaluation.json", "w") as f:
+with open("json/warehouse_1_keys/warehouse1_evaluation.json", "w") as f:
     json.dump(evaluation, f, indent=4)
 #########################################################################################################################################################
