@@ -20,6 +20,7 @@ def execute_ground_truth_queries(db_path, queries):
 
         query_result = {
             "nl": q["nl"],
+            "sql": q["sql"],
             "prediction": None
         }
 
@@ -48,25 +49,27 @@ def execute_llm_queries(db_path, queries):
 
         query_result = {
             "nl": q["nl"],
+            "sql_llama": q['llama_sql'],
             "llama": None,
+            "sql_gpt": q['gpt_sql'],
             "gpt": None
         }
 
         # ---------------- LLAMA ----------------
-        sql = q["llama_sql"].strip()
+        sql_llama = q["llama_sql"].strip()
 
-        if sql.upper() == "NO QUERY;" or sql == "":
+        if sql_llama.upper() == "NO QUERY;" or sql_llama == "":
             query_result["llama"] = {"error": "no query generated"}
         else:
-            query_result["llama"] = execute_queries(sql, cursor, query_result["llama"])
+            query_result["llama"] = execute_queries(sql_llama, cursor, query_result["llama"])
 
         # ---------------- GPT ----------------
-        sql = q["gpt_sql"].strip()
+        sql_gpt = q["gpt_sql"].strip()
 
-        if sql.upper() == "NO QUERY;" or sql == "":
+        if sql_gpt.upper() == "NO QUERY;" or sql_gpt == "":
             query_result["gpt"] = {"error": "no query generated"}
         else:
-            query_result["gpt"] = execute_queries(sql, cursor, query_result["gpt"])
+            query_result["gpt"] = execute_queries(sql_gpt, cursor, query_result["gpt"])
 
         results.append(query_result)
 

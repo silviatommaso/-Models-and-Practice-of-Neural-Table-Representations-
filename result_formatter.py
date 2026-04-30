@@ -12,10 +12,12 @@ def build_schema_map(schema_file):
     for item in schema_data:
 
         nl = item["nl"]
+        sql = item["sql"]
         predictions = item.get("prediction", item.get("predictions", []))
 
         if not predictions:
             schema_map[nl] = []
+            schema_map[sql] = []
             continue
 
 
@@ -75,6 +77,8 @@ def reorder_file(input_file, schema_file):
     for item in data:
 
         nl = item["nl"]
+        sql_llama = item["sql_llama"]
+        sql_gpt = item["sql_gpt"]
 
         llama = item.get("llama", [])
         gpt = item.get("gpt", [])
@@ -92,7 +96,9 @@ def reorder_file(input_file, schema_file):
 
         new_data.append({
             "nl": nl,
+            "sql_llama": sql_llama,
             "llama": ordered_llama,
+            "sql_gpt": sql_gpt,
             "gpt": ordered_gpt
         })
 
@@ -111,6 +117,7 @@ def to_tuple_format(input_file):
     for item in data:
 
         nl = item["nl"]
+        sql = item["sql"]
         prediction = item.get("prediction", [])
 
         # caso errore
@@ -124,6 +131,7 @@ def to_tuple_format(input_file):
 
         new_data.append({
             "nl": nl,
+            "sql": sql,
             "prediction": new_prediction
         })
 
