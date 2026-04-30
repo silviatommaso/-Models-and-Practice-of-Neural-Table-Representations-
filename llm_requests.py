@@ -39,8 +39,8 @@ def text_to_sql_prompt(input_data):
         nl = item["nl"]
         tables = item["tables"]
         table_schemas = item["table_schemas"]
-        # primary_keys = item["primary_keys"]
-        # foreign_keys = item["foreign_keys"]
+        primary_keys = item["primary_keys"]
+        foreign_keys = item["foreign_keys"]
 
 
         prompt = f"""
@@ -50,6 +50,8 @@ def text_to_sql_prompt(input_data):
         - A natural language question (nl)
         - A list of relevant tables (tables)
         - The schema of those tables (table_schemas)
+        - The primary keys of those tables (primary_keys)
+        - The foreign keys of those tables (foreign_keys)
         
 
 
@@ -62,14 +64,11 @@ def text_to_sql_prompt(input_data):
         nl: {nl}
         tables: {tables}
         schema: {table_schemas}
+        # primary_keys: {primary_keys}
+        # foreign_keys: {foreign_keys}
         
         """
 
-        # - The primary keys of those tables (primary_keys)
-        # - The foreign keys of those tables (foreign_keys)
-
-        # primary_keys: {primary_keys}
-        # foreign_keys: {foreign_keys}
 
         try:
             start = time.time()
@@ -89,8 +88,8 @@ def text_to_sql_prompt(input_data):
             "nl": nl,
             "tables": tables,
             "schema": table_schemas,
-            # "primary_keys": primary_keys,
-            # "foreign_keys": foreign_keys,
+            "primary_keys": primary_keys,
+            "foreign_keys": foreign_keys,
             "prompt": prompt,
             "predictions": {
                 "llama-3.3-70b-versatile": sql_llama,
