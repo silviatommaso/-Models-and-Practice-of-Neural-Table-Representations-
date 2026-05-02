@@ -8,17 +8,22 @@ def evaluate(pred, gt):
 
     results = []
 
-    # -----------------------
-    # PER-QUERY LOOP
-    # -----------------------
     for p_item, g_item in zip(pred, gt):
 
-        pred_llama = [tuple(row) for row in p_item.get("llama", [])]
-        pred_gpt = [tuple(row) for row in p_item.get("gpt", [])]
-        gt_pred = [tuple(row) for row in g_item.get("prediction", [])]
+        # Normalizzazione: None -> []
+        pred_llama = [tuple(row) for row in (p_item.get("llama") or [])]
+        pred_gpt = [tuple(row) for row in (p_item.get("gpt") or [])]
+        gt_pred = [tuple(row) for row in (g_item.get("prediction") or [])]
 
         gt_sql = g_item.get("sql", None)
         order_flag = has_order_by(gt_sql)
+
+        # -----------------------
+        # EMPTY CASE CHECK
+        # -----------------------
+
+        llama_empty_correct = (pred_llama == [] and gt_pred == [])
+        gpt_empty_correct = (pred_gpt == [] and gt_pred == [])
 
         # -----------------------
         # 1. CELL METRICS
@@ -35,11 +40,19 @@ def evaluate(pred, gt):
         correct_llama_cells = sum((pred_llama_counter & gt_counter).values())
         correct_gpt_cells = sum((pred_gpt_counter & gt_counter).values())
 
-        cell_llama_precision = correct_llama_cells / len(pred_llama_cells) if pred_llama_cells else 0
-        cell_gpt_precision = correct_gpt_cells / len(pred_gpt_cells) if pred_gpt_cells else 0
+        if llama_empty_correct:
+            cell_llama_precision = 1
+            cell_llama_recall = 1
+        else:
+            cell_llama_precision = correct_llama_cells / len(pred_llama_cells) if pred_llama_cells else 0
+            cell_llama_recall = correct_llama_cells / len(gt_cells) if gt_cells else 0
 
-        cell_llama_recall = correct_llama_cells / len(gt_cells) if gt_cells else 0
-        cell_gpt_recall = correct_gpt_cells / len(gt_cells) if gt_cells else 0
+        if gpt_empty_correct:
+            cell_gpt_precision = 1
+            cell_gpt_recall = 1
+        else:
+            cell_gpt_precision = correct_gpt_cells / len(pred_gpt_cells) if pred_gpt_cells else 0
+            cell_gpt_recall = correct_gpt_cells / len(gt_cells) if gt_cells else 0
 
         # -----------------------
         # 2. TUPLE METRICS
@@ -52,36 +65,47 @@ def evaluate(pred, gt):
         correct_llama_tuples = len(pred_llama_set & gt_set)
         correct_gpt_tuples = len(pred_gpt_set & gt_set)
 
-        tuple_llama_constraint = correct_llama_tuples / len(pred_llama) if pred_llama else 0
-        tuple_gpt_constraint = correct_gpt_tuples / len(pred_gpt) if pred_gpt else 0
+        if llama_empty_correct:
+            tuple_llama_constraint = 1
+            tuple_llama_cardinality = 1
+        else:
+            tuple_llama_constraint = correct_llama_tuples / len(pred_llama) if pred_llama else 0
+            tuple_llama_cardinality = (
+                min(len(pred_llama), len(gt_pred)) / max(len(pred_llama), len(gt_pred))
+            ) if (pred_llama or gt_pred) else 0
 
-        tuple_llama_cardinality = (
-            min(len(pred_llama), len(gt_pred)) / max(len(pred_llama), len(gt_pred))
-        ) if (pred_llama or gt_pred) else 0
-
-        tuple_gpt_cardinality = (
-            min(len(pred_gpt), len(gt_pred)) / max(len(pred_gpt), len(gt_pred))
-        ) if (pred_gpt or gt_pred) else 0
+        if gpt_empty_correct:
+            tuple_gpt_constraint = 1
+            tuple_gpt_cardinality = 1
+        else:
+            tuple_gpt_constraint = correct_gpt_tuples / len(pred_gpt) if pred_gpt else 0
+            tuple_gpt_cardinality = (
+                min(len(pred_gpt), len(gt_pred)) / max(len(pred_gpt), len(gt_pred))
+            ) if (pred_gpt or gt_pred) else 0
 
         # -----------------------
-        # 3. ORDER METRIC (solo se ORDER BY)
+        # 3. ORDER METRIC
         # -----------------------
 
         den = len(gt_pred)
 
-        tuple_llama_order = (
-            sum(
-                1 for i in range(den)
-                if i < len(pred_llama) and pred_llama[i] == gt_pred[i]
-            ) / den
-        ) if (den > 0 and order_flag) else None
+        if order_flag and den == 0:
+            tuple_llama_order = 1 if llama_empty_correct else 0
+            tuple_gpt_order = 1 if gpt_empty_correct else 0
+        else:
+            tuple_llama_order = (
+                sum(
+                    1 for i in range(den)
+                    if i < len(pred_llama) and pred_llama[i] == gt_pred[i]
+                ) / den
+            ) if (den > 0 and order_flag) else None
 
-        tuple_gpt_order = (
-            sum(
-                1 for i in range(den)
-                if i < len(pred_gpt) and pred_gpt[i] == gt_pred[i]
-            ) / den
-        ) if (den > 0 and order_flag) else None
+            tuple_gpt_order = (
+                sum(
+                    1 for i in range(den)
+                    if i < len(pred_gpt) and pred_gpt[i] == gt_pred[i]
+                ) / den
+            ) if (den > 0 and order_flag) else None
 
         # -----------------------
         # 4. QUERY SCORE
