@@ -41,19 +41,27 @@ db_path = os.getenv("DB__BOOK_1_PATH")
 ##########################################################################
 # # - Response normalization 
 
-# with open("json_QA/book_1/book1_predictions_llm.json", 'r') as f:
-#     data = json.load(f)
+with open("json_QA/book_1/book1_predictions_llm.json", 'r') as f:
+    data = json.load(f)
 
-# for item in data:
+results = []
 
-#     for model in item["predictions"]:
-#         item["predictions"][model] = normalize_llm_output(
-#             item["predictions"][model]
-#         )
+for item in data:
 
-# with open("json_QA/book_1/book1_predictions_llm_normalized.json", "w") as f:
-#     json.dump(data, f, indent=4)
-##########################################################################
+    new_item = {
+        "nl": item["nl"],
+        "llama": [],
+        "gpt": []
+    }
+
+    new_item["llama"] = normalize_llm_output(item.get("predictions", {}).get("llama-3.3-70b-versatile", []))
+    new_item["gpt"] = normalize_llm_output(item.get("predictions", {}).get("gpt-oss-120b", []))
+
+    results.append(new_item)
+
+with open("json_QA/book_1/book1_predictions_llm_normalized.json", "w") as f:
+    json.dump(results, f, indent=4)
+########################################################################
 
 
 
@@ -66,7 +74,7 @@ db_path = os.getenv("DB__BOOK_1_PATH")
 # # - Normalize the SQL queries in the annotations.json file to create a clean ground truth for evaluation.
 ground_truth = normalize_ground_truth(file_path)
 
-with open("json/book_1_keys/book1_ground_truth.json", "w") as f:
+with open("json_QA/book_1/book1_ground_truth.json", "w") as f:
     json.dump(ground_truth, f, indent=4)
 #################################################################################################################
 
@@ -84,9 +92,9 @@ for item in data:
 
 sqlite_results = execute_ground_truth_queries(db_path, queries)
 
-with open("json/book_1_keys/book1_ground_truth_sqlite_response.json", "w") as f:
+with open("json_QA/book_1/book1_ground_truth_sqlite_response.json", "w") as f:
     json.dump(sqlite_results, f, indent=4)
-################################################################################################################
+######################################################################################################################
 
 
 
@@ -99,24 +107,24 @@ with open("json/book_1_keys/book1_ground_truth_sqlite_response.json", "w") as f:
 
 #############################################################################################################################################################################################################################################################
 # # - Normalize the keys of the SQL query results and reorder them according to the schema order extracted from the ground truth data, to ensure a fair comparison between the predicted results and the ground truth results.
-# book1_sqlite_tuples = reorder_file("json/book_1_keys/book1_sqlite_response.json", "json/book_1_keys/book1_ground_truth_sqlite_response.json")
+book1_sqlite_tuples = reorder_file("json_QA/book_1/book1_predictions_llm_normalized.json", "json_QA/book_1/book1_ground_truth_sqlite_response.json")
 
-# with open("json/book_1/book1_sqlite_tuples.json", "w") as f:
-#     json.dump(book1_sqlite_tuples, f, indent=4)
+with open("json_QA/book_1/book1_sqlite_tuples.json", "w") as f:
+    json.dump(book1_sqlite_tuples, f, indent=4)
 #############################################################################################################################################################################################################################################################
 
 #########################################################################################################################################################
 # # - Transforming the ground truth into a list of tuples
-# ground_truth_tuples = to_tuple_format("json/book_1_keys/book1_ground_truth_sqlite_response.json")
+ground_truth_tuples = to_tuple_format("json_QA/book_1/book1_ground_truth_sqlite_response.json")
 
-# with open("json/book_1/book1_ground_truth_tuples.json", "w") as f:
+# with open("json_QA/book_1/book1_ground_truth_tuples.json", "w") as f:
 #     json.dump(ground_truth_tuples, f, indent=4)
 #########################################################################################################################################################
 
 #########################################################################################################################################################
 # # - Comparing the groundtruth and the predicted results
-# evaluation = evaluate(book1_sqlite_tuples, ground_truth_tuples)
+evaluation = evaluate(book1_sqlite_tuples, ground_truth_tuples)
 
-# with open("json/book_1_keys/book1_evaluation.json", "w") as f:
-#     json.dump(evaluation, f, indent=4)
+with open("json_QA/book_1/book1_evaluation.json", "w") as f:
+    json.dump(evaluation, f, indent=4)
 #########################################################################################################################################################

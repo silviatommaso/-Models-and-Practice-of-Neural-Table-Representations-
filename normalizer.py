@@ -2,6 +2,43 @@ import re
 import json
 
 
+def convert_type(value, typ):
+
+    typ = typ.lower()
+
+    try:
+        # -------- NUMBER(p,s) --------
+        if "number" in typ:
+            # se ha decimali → float
+            if "(" in typ and "," in typ:
+                scale = int(typ.split(",")[1].replace(")", ""))
+                if scale > 0:
+                    return float(value)
+                else:
+                    return int(value)
+            else:
+                return float(value)
+
+        # -------- INTEGER --------
+        elif "int" in typ or "bigint" in typ:
+            return int(value)
+
+        # -------- FLOAT --------
+        elif "float" in typ or "double" in typ or "real" in typ:
+            return float(value)
+
+        # -------- BOOLEAN --------
+        elif "bool" in typ:
+            return value.lower() in ["true", "1", "yes"]
+
+        # -------- STRING --------
+        else:
+            return value
+
+    except:
+        return value    
+
+
 def normalize_sql(sql):
 
     if not sql:
@@ -63,7 +100,7 @@ def normalize_ground_truth(ground_truth_path):
     return results
 
 
-def normalize_llm_output(text, keys=None):
+def normalize_llm_output(text):
 
     if text is None:
         return []
@@ -76,26 +113,21 @@ def normalize_llm_output(text, keys=None):
 
     results = []
 
-    # -----------------------
-    # detect record separator
-    # -----------------------
-    if "\n\n" in text:
-        records = text.strip().split("\n\n")
-    else:
-        records = text.strip().split("\n")
 
-    # -----------------------
+    # detect record separator
+    records = text.strip().split("\n")
+
+
     # parse each record
-    # -----------------------
     for record in records:
 
         item = {}
 
-        # decide inner split
-        if "|" in record:
-            parts = record.split("|")
-        else:
-            parts = record.split("\n")
+        # To handle cases where the LLM might not follow the expected format (for example when it adds not asked further explainations)
+        if "|" not in record:
+            continue
+
+        parts = record.split("|")
 
         for part in parts:
             part = part.strip()
@@ -109,9 +141,10 @@ def normalize_llm_output(text, keys=None):
                 continue
 
             attribute = tokens[0]
+            type = tokens[1]
             value = tokens[-1]
 
-            item[attribute] = value
+            item[attribute] = convert_type(value, type)
 
         if item:
             results.append(item)

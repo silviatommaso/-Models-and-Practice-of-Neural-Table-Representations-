@@ -18,7 +18,7 @@ def build_messages_QA(nl, table_serialized, primary_keys, foreign_keys):
             Rules:
             - Use ONLY the provided serialized tables to find the answer to the question.
             - Look at attribute's values and types, primary and foreign keys.
-            - Return ONLY the rows you find (no explanation) in the format "attribute: value | attribute: value | ...". If multiple rows are found, separate them with a newline character.
+            - Return ONLY the rows you find (no explanation) in the format "attribute: type: value | attribute: type: value | ...". If multiple rows are found, separate them with a newline character.
             - If the question cannot be answered with the provided tables, return "NO ANSWER"
             """
         },

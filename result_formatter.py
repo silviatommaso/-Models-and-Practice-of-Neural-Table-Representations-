@@ -13,7 +13,7 @@ def build_schema_map(schema_file):
 
         nl = item["nl"]
         sql = item["sql"]
-        predictions = item.get("prediction", item.get("predictions", []))
+        predictions = item.get("prediction", [])
 
         if not predictions:
             schema_map[nl] = []
@@ -23,8 +23,8 @@ def build_schema_map(schema_file):
 
         if isinstance(predictions, list):
             first_row = predictions[0] if predictions else {}
-        elif isinstance(predictions, dict):
-            first_row = predictions
+        # elif isinstance(predictions, dict):
+        #     first_row = predictions
         else:
             first_row = {}
 
@@ -77,15 +77,15 @@ def reorder_file(input_file, schema_file):
     for item in data:
 
         nl = item["nl"]
-        sql_llama = item["sql_llama"]
-        sql_gpt = item["sql_gpt"]
+        # sql_llama = item["sql_llama"]
+        # sql_gpt = item["sql_gpt"]
 
         llama = item.get("llama", [])
         gpt = item.get("gpt", [])
 
         # if the predictions are not lists (e.g., in case of errors), we set them to empty lists to avoid issues during reordering
-        llama = llama if isinstance(llama, list) else []
-        gpt = gpt if isinstance(gpt, list) else []
+        # llama = llama if isinstance(llama, list) else []
+        # gpt = gpt if isinstance(gpt, list) else []
 
         schema_order = schema_map.get(nl, [])
 
@@ -96,9 +96,9 @@ def reorder_file(input_file, schema_file):
 
         new_data.append({
             "nl": nl,
-            "sql_llama": sql_llama,
+            # "sql_llama": sql_llama,
             "llama": ordered_llama,
-            "sql_gpt": sql_gpt,
+            # "sql_gpt": sql_gpt,
             "gpt": ordered_gpt
         })
 
