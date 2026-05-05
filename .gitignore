@@ -153,6 +153,7 @@ config.py
 book_1/
 warehouse_1/
 json/
+json_QA/
 # .envrc
 # .venv
 # env/

@@ -61,3 +61,59 @@ def normalize_ground_truth(ground_truth_path):
         })
 
     return results
+
+
+def normalize_llm_output(text, keys=None):
+
+    if text is None:
+        return []
+
+    if not isinstance(text, str):
+        text = str(text)
+
+    if not text.strip():
+        return []
+
+    results = []
+
+    # -----------------------
+    # detect record separator
+    # -----------------------
+    if "\n\n" in text:
+        records = text.strip().split("\n\n")
+    else:
+        records = [text.strip()]
+
+    # -----------------------
+    # parse each record
+    # -----------------------
+    for record in records:
+
+        item = {}
+
+        # decide inner split
+        if "|" in record:
+            parts = record.split("|")
+        else:
+            parts = record.split("\n")
+
+        for part in parts:
+            part = part.strip()
+
+            if not part:
+                continue
+
+            tokens = [t.strip() for t in part.split(":")]
+
+            if len(tokens) < 2:
+                continue
+
+            attribute = tokens[0]
+            value = tokens[-1]
+
+            item[attribute] = value
+
+        if item:
+            results.append(item)
+
+    return results
