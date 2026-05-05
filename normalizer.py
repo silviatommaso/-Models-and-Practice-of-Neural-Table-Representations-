@@ -82,7 +82,7 @@ def normalize_llm_output(text, keys=None):
     if "\n\n" in text:
         records = text.strip().split("\n\n")
     else:
-        records = [text.strip()]
+        records = text.strip().split("\n")
 
     # -----------------------
     # parse each record

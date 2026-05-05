@@ -41,41 +41,19 @@ db_path = os.getenv("DB__BOOK_1_PATH")
 ##########################################################################
 # # - Response normalization 
 
-with open("json_QA/book_1/book1_predictions_llm.json", 'r') as f:
-    data = json.load(f)
-
-for item in data:
-
-    for model in item["predictions"]:
-        item["predictions"][model] = normalize_llm_output(
-            item["predictions"][model]
-        )
-
-with open("json_QA/book_1/book1_predictions_llm_normalized.json", "w") as f:
-    json.dump(data, f, indent=4)
-##########################################################################
-
-##########################################################################
-# # - Execute the generated SQL queries on the database
-# with open("json/book_1_keys/book1_predictions.json", 'r') as f:
+# with open("json_QA/book_1/book1_predictions_llm.json", 'r') as f:
 #     data = json.load(f)
 
-#     queries = []
+# for item in data:
 
-#     for item in data:
-#         queries.append({
-#             "nl": item["nl"],
-#             "llama_sql": item["predictions"].get("llama-3.3-70b-versatile", ""),
-#             "gpt_sql": item["predictions"].get("gpt-oss-120b", "")
-#         })
+#     for model in item["predictions"]:
+#         item["predictions"][model] = normalize_llm_output(
+#             item["predictions"][model]
+#         )
 
-# sqlite_results = execute_llm_queries(db_path, queries)
-
-# with open("json/book_1_keys/book1_sqlite_response.json", "w") as f:
-#     json.dump(sqlite_results, f, indent=4)
-###########################################################################
-
-
+# with open("json_QA/book_1/book1_predictions_llm_normalized.json", "w") as f:
+#     json.dump(data, f, indent=4)
+##########################################################################
 
 
 
@@ -86,28 +64,28 @@ with open("json_QA/book_1/book1_predictions_llm_normalized.json", "w") as f:
 
 #################################################################################################################
 # # - Normalize the SQL queries in the annotations.json file to create a clean ground truth for evaluation.
-# ground_truth = normalize_ground_truth(file_path)
+ground_truth = normalize_ground_truth(file_path)
 
-# with open("json/book_1_keys/book1_ground_truth.json", "w") as f:
-#     json.dump(ground_truth, f, indent=4)
+with open("json/book_1_keys/book1_ground_truth.json", "w") as f:
+    json.dump(ground_truth, f, indent=4)
 #################################################################################################################
 
 #################################################################################################################
 # # - Execute the ground truth SQL queries on the database
-# data = ground_truth
+data = ground_truth
 
-# queries = []
+queries = []
 
-# for item in data:
-#     queries.append({
-#         "nl": item["nl"],
-#         "sql": item["sql"]
-#     })
+for item in data:
+    queries.append({
+        "nl": item["nl"],
+        "sql": item["sql"]
+    })
 
-# sqlite_results = execute_ground_truth_queries(db_path, queries)
+sqlite_results = execute_ground_truth_queries(db_path, queries)
 
-# with open("json/book_1_keys/book1_ground_truth_sqlite_response.json", "w") as f:
-#     json.dump(sqlite_results, f, indent=4)
+with open("json/book_1_keys/book1_ground_truth_sqlite_response.json", "w") as f:
+    json.dump(sqlite_results, f, indent=4)
 ################################################################################################################
 
 

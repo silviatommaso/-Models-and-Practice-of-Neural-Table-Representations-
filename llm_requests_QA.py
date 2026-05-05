@@ -16,9 +16,9 @@ def build_messages_QA(nl, table_serialized, primary_keys, foreign_keys):
             "content": """You are a system that search for the answer of a natural language question in a serialized database format (TABLE: attribute: type: value).
 
             Rules:
-            - Use ONLY the provided serialized tables
-            - Find the answer to the question in the serialized tables, by looking at the values of the attributes and their types, and by following the relationships between tables through primary keys and foreign keys.
-            - Return ONLY the rows you find (no explanation) in the format "attribute: value"
+            - Use ONLY the provided serialized tables to find the answer to the question.
+            - Look at attribute's values and types, primary and foreign keys.
+            - Return ONLY the rows you find (no explanation) in the format "attribute: value | attribute: value | ...". If multiple rows are found, separate them with a newline character.
             - If the question cannot be answered with the provided tables, return "NO ANSWER"
             """
         },
