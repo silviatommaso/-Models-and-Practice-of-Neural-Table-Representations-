@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 from annotation_parser import parse_annotations
-from llm_requests_QA import question_answer_prompt
+from llm_requests import question_answer_prompt
 from normalizer import normalize_sql, normalize_ground_truth, normalize_llm_output
 from questioning import execute_llm_queries, execute_ground_truth_queries
 from result_formatter import reorder_file, to_tuple_format
