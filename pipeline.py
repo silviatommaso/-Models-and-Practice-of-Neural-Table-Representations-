@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 from annotation_parser import parse_annotations
 from llm_requests import prompt
-from normalizer import normalize_sql, normalize_ground_truth
+from normalizer import normalize
 from questioning import execute_llm_queries, execute_ground_truth_queries
 from result_formatter import reorder_file, to_tuple_format
 from evaluation import evaluate
@@ -20,44 +20,49 @@ db_path = os.getenv("DB__BOOK_1_PATH")
 # #       - sql
 # # - Schema extraction from schema.sql 
 
-results = parse_annotations(file_path, db_path)
+# results = parse_annotations(file_path, db_path)
 
-with open("json/book_1/book1_queries.json", "w") as f:
-    json.dump(results, f, indent=4)
+# with open("json/book_1/book1_queries.json", "w") as f:
+#     json.dump(results, f, indent=4)
 ##########################################################################
 
 ##########################################################################
 # # - Prompt LLM for SQL query generation:
-llm_TTSQL, llm_QA = prompt(results)
+# llm_TTSQL, llm_QA = prompt(results)
 
-with open("json/book_1/book1_predictions_QA.json", "w") as f:
-    json.dump(llm_QA, f, indent=4)
+# with open("json/book_1/book_1_QA/book1_llm_QA.json", "w") as f:
+#     json.dump(llm_QA, f, indent=4)
 
-with open("json/book_1/book1_predictions_TTSQL.json", "w") as f:
-    json.dump(llm_TTSQL, f, indent=4)
+# with open("json/book_1/book_1_TTSQL/book1_llm_TTSQL.json", "w") as f:
+#     json.dump(llm_TTSQL, f, indent=4)
 ##########################################################################
 
 ##########################################################################
 # # - Response normalization 
 
-with open("json_QA/book_1/book1_predictions_llm.json", 'r') as f:
-    data = json.load(f)
+# with open("json/book_1/book_1_QA/book1_llm_QA.json", 'r') as f:
+#     data_QA = json.load(f)
 
-results = []
+# with open("json/book_1/book_1_TTSQL/book1_llm_TTSQL.json", 'r') as f:
+#     data_TTSQL = json.load(f)
 
-for item in data:
 
-    new_item = {
-        "nl": item["nl"],
-        "llama": [],
-        "gpt": []
-    }
+# normalized_QA, normalized_TTSQL = normalize(data_QA, data_TTSQL)
 
-    new_item["llama"] = normalize_llm_output(item.get("predictions", {}).get("llama-3.3-70b-versatile", []))
-    new_item["gpt"] = normalize_llm_output(item.get("predictions", {}).get("gpt-oss-120b", []))
+# with open("json/book_1/book_1_QA/book1_predictions_QA.json", "w") as f:
+#     json.dump(normalized_QA, f, indent=4)
 
-    results.append(new_item)
-
-with open("json_QA/book_1/book1_predictions_llm_normalized.json", "w") as f:
-    json.dump(results, f, indent=4)
+# with open("json/book_1/book_1_TTSQL/book1_predictions_TTSQL.json", "w") as f:
+#     json.dump(normalized_TTSQL, f, indent=4)
 ########################################################################
+
+##########################################################################
+# # - Execute the generated SQL queries on the database
+# with open("json/book_1/book_1_TTSQL/book1_predictions_TTSQL.json", 'r') as f:
+#     data = json.load(f)
+
+# sqlite_results = execute_llm_queries(db_path, data)
+
+# with open("json/book_1/book_1_TTSQL/book1_sqlite_response.json", "w") as f:
+#     json.dump(sqlite_results, f, indent=4)
+###########################################################################

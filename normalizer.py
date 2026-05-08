@@ -2,30 +2,30 @@ import re
 import json
 
 
+#-------------------------- UTILS FOR NORMALIZATION OF LLM RESPONSES -------------------------
+
 def convert_type(value, typ):
 
-    typ = typ.lower()
+    typ = typ.lower().replace(" ", "")
+    value_str = str(value).strip()
 
     try:
         # -------- NUMBER(p,s) --------
         if "number" in typ:
             # se ha decimali → float
-            if "(" in typ and "," in typ:
-                scale = int(typ.split(",")[1].replace(")", ""))
-                if scale > 0:
-                    return float(value)
-                else:
-                    return int(value)
-            else:
-                return float(value)
+            if '.' in value_str:
+                integer_part, decimal_part = value_str.split('.', 1)
+                
+                if set(decimal_part) == {'0'}:
+                    return int(integer_part)
+                
+                return float(value_str)
+            
+            return int(value_str)
 
         # -------- INTEGER --------
         elif "int" in typ or "bigint" in typ:
             return int(value)
-
-        # -------- FLOAT --------
-        elif "float" in typ or "double" in typ or "real" in typ:
-            return float(value)
 
         # -------- BOOLEAN --------
         elif "bool" in typ:
@@ -37,6 +37,7 @@ def convert_type(value, typ):
 
     except:
         return value    
+
 
 
 def normalize_sql(sql):
@@ -69,7 +70,6 @@ def normalize_sql(sql):
     return sql
 
 
-
 def normalize_ground_truth(ground_truth_path):
 
     #open ground truth file
@@ -98,6 +98,7 @@ def normalize_ground_truth(ground_truth_path):
         })
 
     return results
+
 
 
 def normalize_llm_output(text):
@@ -150,3 +151,33 @@ def normalize_llm_output(text):
             results.append(item)
 
     return results
+
+
+
+def normalize(data_QA, data_TTSQL):
+
+    normalized_QA = []
+    normalized_TTSQL = []
+
+    for item in data_QA:
+        new_item = {
+            "nl": item["nl"],
+            "llama": normalize_llm_output(item.get("predictions", {}).get("llama-3.3-70b-versatile", [])),
+            "gpt": normalize_llm_output(item.get("predictions", {}).get("gpt-oss-120b", []))
+        }
+
+        normalized_QA.append(new_item)
+
+
+
+    for item in data_TTSQL:
+        new_item = {
+            "nl": item["nl"],
+            "llama": normalize_sql(item["predictions"]["llama-3.3-70b-versatile"]),
+            "gpt": normalize_sql(item["predictions"]["gpt-oss-120b"])
+        }
+
+        normalized_TTSQL.append(new_item)
+        
+
+    return normalized_QA, normalized_TTSQL

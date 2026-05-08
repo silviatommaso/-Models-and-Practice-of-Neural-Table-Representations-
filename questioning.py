@@ -49,14 +49,14 @@ def execute_llm_queries(db_path, queries):
 
         query_result = {
             "nl": q["nl"],
-            "sql_llama": q['llama_sql'],
+            "sql_llama": q['llama'],
             "llama": None,
-            "sql_gpt": q['gpt_sql'],
+            "sql_gpt": q['gpt'],
             "gpt": None
         }
 
         # ---------------- LLAMA ----------------
-        sql_llama = q["llama_sql"].strip()
+        sql_llama = q["llama"].strip()
 
         if sql_llama.upper() == "NO QUERY;" or sql_llama == "":
             query_result["llama"] = {"error": "no query generated"}
@@ -64,7 +64,7 @@ def execute_llm_queries(db_path, queries):
             query_result["llama"] = execute_queries(sql_llama, cursor, query_result["llama"])
 
         # ---------------- GPT ----------------
-        sql_gpt = q["gpt_sql"].strip()
+        sql_gpt = q["gpt"].strip()
 
         if sql_gpt.upper() == "NO QUERY;" or sql_gpt == "":
             query_result["gpt"] = {"error": "no query generated"}
