@@ -1,10 +1,51 @@
 import sqlite3
 
+#------------------------------------------Utility functions-----------------------------------------
 
 #format the results of a SQL query into a list of dictionaries 
 def format_results(cursor, rows):
+
     columns = [desc[0] for desc in cursor.description]
-    return [dict(zip(columns, row)) for row in rows]
+
+    formatted_rows = []
+
+    for row in rows:
+
+        new_row = {}
+
+        for col, val in zip(columns, row):
+
+            # round floats
+            if isinstance(val, float):
+                val = round(val, 2)
+
+                # se tipo 4.0 -> 4
+                if val.is_integer():
+                    val = int(val)
+
+            new_row[col] = val
+
+        formatted_rows.append(new_row)
+
+    return formatted_rows
+
+
+# Function to question the database with the SQL queries 
+def execute_queries(sql, cursor, prediction):
+    
+    try:
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        prediction = format_results(cursor, rows)
+    except Exception as e:
+        prediction = {"error": str(e)}
+
+    return prediction
+
+
+
+
+
 
 
 
@@ -76,18 +117,3 @@ def execute_llm_queries(db_path, queries):
     conn.close()
 
     return results
-
-
-
-
-# Function to question the database with the SQL queries 
-def execute_queries(sql, cursor, prediction):
-    
-    try:
-        cursor.execute(sql)
-        rows = cursor.fetchall()
-        prediction = format_results(cursor, rows)
-    except Exception as e:
-        prediction = {"error": str(e)}
-
-    return prediction

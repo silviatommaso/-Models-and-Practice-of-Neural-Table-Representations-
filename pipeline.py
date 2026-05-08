@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 from annotation_parser import parse_annotations
 from llm_requests import prompt
-from normalizer import normalize
+from normalizer import normalize, normalize_ground_truth
 from questioning import execute_llm_queries, execute_ground_truth_queries
 from result_formatter import reorder_file, to_tuple_format
 from evaluation import evaluate
@@ -66,3 +66,36 @@ db_path = os.getenv("DB__BOOK_1_PATH")
 # with open("json/book_1/book_1_TTSQL/book1_sqlite_response.json", "w") as f:
 #     json.dump(sqlite_results, f, indent=4)
 ###########################################################################
+
+
+
+
+# -----------------------------------
+# # GROUND TRUTH REFINEMENT: 
+# -----------------------------------
+
+#################################################################################################################
+# # - Normalize the SQL queries in the annotations.json file to create a clean ground truth for evaluation.
+# ground_truth = normalize_ground_truth(file_path)
+
+# with open("json/book_1/book1_ground_truth.json", "w") as f:
+#     json.dump(ground_truth, f, indent=4)
+#################################################################################################################
+
+#################################################################################################################
+# # - Execute the ground truth SQL queries on the database
+# data = ground_truth
+
+# queries = []
+
+# for item in data:
+#     queries.append({
+#         "nl": item["nl"],
+#         "sql": item["sql"]
+#     })
+
+# sqlite_results = execute_ground_truth_queries(db_path, queries)
+
+# with open("json/book_1/book1_ground_truth_sqlite_response.json", "w") as f:
+#     json.dump(sqlite_results, f, indent=4)
+################################################################################################################
