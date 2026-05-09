@@ -1,7 +1,7 @@
-import json
 import os
 from dotenv import load_dotenv
 
+from file_load import read_file, write_file
 from annotation_parser import parse_annotations
 from llm_requests import prompt
 from normalizer import normalize, normalize_ground_truth
@@ -20,51 +20,41 @@ db_path = os.getenv("DB__BOOK_1_PATH")
 # #       - sql
 # # - Schema extraction from schema.sql 
 
-# results = parse_annotations(file_path, db_path)
+queries = parse_annotations(file_path, db_path)
 
-# with open("json/book_1/book1_queries.json", "w") as f:
-#     json.dump(results, f, indent=4)
+write_file(queries, "json/book_1/book1_queries.json")
 ##########################################################################
 
 ##########################################################################
 # # - Prompt LLM for SQL query generation:
-# llm_TTSQL, llm_QA = prompt(results)
+llm_TTSQL, llm_QA = prompt(queries)
 
-# with open("json/book_1/book_1_QA/book1_llm_QA.json", "w") as f:
-#     json.dump(llm_QA, f, indent=4)
-
-# with open("json/book_1/book_1_TTSQL/book1_llm_TTSQL.json", "w") as f:
-#     json.dump(llm_TTSQL, f, indent=4)
+# write_file(llm_QA, "json/book_1/book_1_QA/book1_llm_QA.json")
+# write_file(llm_TTSQL, "json/book_1/book_1_TTSQL/book1_llm_TTSQL.json")
 ##########################################################################
 
 ##########################################################################
 # # - Response normalization 
 
-# with open("json/book_1/book_1_QA/book1_llm_QA.json", 'r') as f:
-#     data_QA = json.load(f)
-
-# with open("json/book_1/book_1_TTSQL/book1_llm_TTSQL.json", 'r') as f:
-#     data_TTSQL = json.load(f)
+# data_QA = read_file("json/book_1/book_1_QA/book1_llm_QA.json")
+# data_TTSQL = read_file("json/book_1/book_1_TTSQL/book1_llm_TTSQL.json")
 
 
-# normalized_QA, normalized_TTSQL = normalize(data_QA, data_TTSQL)
+normalized_QA, normalized_TTSQL = normalize(llm_QA, llm_TTSQL)
 
-# with open("json/book_1/book_1_QA/book1_predictions_QA.json", "w") as f:
-#     json.dump(normalized_QA, f, indent=4)
-
-# with open("json/book_1/book_1_TTSQL/book1_predictions_TTSQL.json", "w") as f:
-#     json.dump(normalized_TTSQL, f, indent=4)
+write_file(normalized_QA, "json/book_1/book_1_QA/book1_llm_predictions_QA.json")
+write_file(normalized_TTSQL, "json/book_1/book_1_TTSQL/book1_llm_predictions_TTSQL.json")
 ########################################################################
 
 ##########################################################################
-# # - Execute the generated SQL queries on the database
-# with open("json/book_1/book_1_TTSQL/book1_predictions_TTSQL.json", 'r') as f:
+# # - Execute the generated TTSQL queries on the database
+
+# with open("json/book_1/book_1_TTSQL/book1_llm_predictions_TTSQL.json", 'r') as f:
 #     data = json.load(f)
 
-# sqlite_results = execute_llm_queries(db_path, data)
+sqlite_TTSQL = execute_llm_queries(db_path, normalized_TTSQL)
 
-# with open("json/book_1/book_1_TTSQL/book1_sqlite_response.json", "w") as f:
-#     json.dump(sqlite_results, f, indent=4)
+write_file(sqlite_TTSQL, "json/book_1/book_1_TTSQL/book1_sqlite_response.json")
 ###########################################################################
 
 
@@ -78,26 +68,23 @@ db_path = os.getenv("DB__BOOK_1_PATH")
 # # - Normalize the SQL queries in the annotations.json file to create a clean ground truth for evaluation.
 ground_truth = normalize_ground_truth(file_path)
 
-with open("json/book_1/book1_ground_truth.json", "w") as f:
-    json.dump(ground_truth, f, indent=4)
+write_file(ground_truth, "json/book_1/book1_ground_truth.json")
 #################################################################################################################
 
 #################################################################################################################
 # # - Execute the ground truth SQL queries on the database
-data = ground_truth
 
 queries = []
 
-for item in data:
+for item in ground_truth:
     queries.append({
         "nl": item["nl"],
         "sql": item["sql"]
     })
 
-sqlite_results = execute_ground_truth_queries(db_path, queries)
+sqlite_ground_truth = execute_ground_truth_queries(db_path, queries)
 
-with open("json/book_1/book1_ground_truth_sqlite_response.json", "w") as f:
-    json.dump(sqlite_results, f, indent=4)
+write_file(sqlite_ground_truth, "json/book_1/book1_ground_truth_sqlite_response.json")
 ################################################################################################################
 
 
@@ -111,21 +98,17 @@ with open("json/book_1/book1_ground_truth_sqlite_response.json", "w") as f:
 
 #############################################################################################################################################################################################################################################################
 # # - Normalize the keys of the SQL query results and reorder them according to the schema order extracted from the ground truth data, to ensure a fair comparison between the predicted results and the ground truth results.
-with open("json/book_1/book_1_TTSQL/book1_sqlite_response.json", 'r') as f:
-    data_TTSQL = json.load(f)
-with open("json/book_1/book_1_QA/book1_predictions_QA.json", 'r') as f:
-    data_QA = json.load(f)
+gt = read_file("json/book_1/book1_ground_truth_sqlite_response.json")
+data_TTSQL = read_file("json/book_1/book_1_TTSQL/book1_sqlite_response.json")
+data_QA = read_file("json/book_1/book_1_QA/book1_llm_predictions_QA.json")
 
-ground_truth_formatted = remove_attributes_ground_truth(sqlite_results)
+ground_truth_formatted = remove_attributes_ground_truth(gt)
 TTSQL_formatted = remove_attributes(data_TTSQL)
 QA_formatted = remove_attributes(data_QA)
 
-with open("json/book_1/book1_ground_truth_formatted.json", "w") as f:
-    json.dump(ground_truth_formatted, f, indent=4)
-with open("json/book_1/book_1_QA/book1_formatted_QA.json", "w") as f:
-    json.dump(QA_formatted, f, indent=4)
-with open("json/book_1/book_1_TTSQL/book1_formatted_TTSQL.json", "w") as f:
-    json.dump(TTSQL_formatted, f, indent=4)
+# write_file(ground_truth_formatted, "json/book_1/book1_ground_truth_formatted.json")
+# write_file(QA_formatted, "json/book_1/book_1_QA/book1_formatted_QA.json")
+# write_file(TTSQL_formatted, "json/book_1/book_1_TTSQL/book1_formatted_TTSQL.json")
 #######################################################################################################################################################################################################################################################################
 
 #########################################################################################################################################################
@@ -133,8 +116,6 @@ with open("json/book_1/book_1_TTSQL/book1_formatted_TTSQL.json", "w") as f:
 evaluation_QA = evaluate(QA_formatted, ground_truth_formatted)
 evaluation_TTSQL = evaluate(TTSQL_formatted, ground_truth_formatted)
 
-with open("json/book_1/book_1_QA/book1_evaluation.json", "w") as f:
-    json.dump(evaluation_QA, f, indent=4)
-with open("json/book_1/book_1_TTSQL/book1_evaluation_TTSQL.json", "w") as f:
-    json.dump(evaluation_TTSQL, f, indent=4)
+write_file(evaluation_QA, "json/book_1/book_1_QA/book1_evaluation_QA.json")
+write_file(evaluation_TTSQL, "json/book_1/book_1_TTSQL/book1_evaluation_TTSQL.json")
 #########################################################################################################################################################

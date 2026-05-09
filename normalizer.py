@@ -39,6 +39,7 @@ def convert_type(value, typ):
         return value    
 
 
+#----------------------------------------- MAIN FUNCTIONS ------------------------------------------------
 
 def normalize_sql(sql):
 
