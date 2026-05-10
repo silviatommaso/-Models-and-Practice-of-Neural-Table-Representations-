@@ -28,33 +28,21 @@ write_file(queries, "json/book_1/book1_queries.json")
 ##########################################################################
 # # - Prompt LLM for SQL query generation:
 llm_TTSQL, llm_QA = prompt(queries)
-
-# write_file(llm_QA, "json/book_1/book_1_QA/book1_llm_QA.json")
-# write_file(llm_TTSQL, "json/book_1/book_1_TTSQL/book1_llm_TTSQL.json")
 ##########################################################################
 
 ##########################################################################
 # # - Response normalization 
-
-# data_QA = read_file("json/book_1/book_1_QA/book1_llm_QA.json")
-# data_TTSQL = read_file("json/book_1/book_1_TTSQL/book1_llm_TTSQL.json")
-
-
 normalized_QA, normalized_TTSQL = normalize(llm_QA, llm_TTSQL)
 
-write_file(normalized_QA, "json/book_1/book_1_QA/book1_llm_predictions_QA.json")
-write_file(normalized_TTSQL, "json/book_1/book_1_TTSQL/book1_llm_predictions_TTSQL.json")
+write_file(normalized_QA, "json/book_1/book_1_QA_fewshot/book1_llm_predictions_QA.json")
+write_file(normalized_TTSQL, "json/book_1/book_1_TTSQL_fewshot/book1_llm_predictions_TTSQL.json")
 ########################################################################
 
 ##########################################################################
 # # - Execute the generated TTSQL queries on the database
-
-# with open("json/book_1/book_1_TTSQL/book1_llm_predictions_TTSQL.json", 'r') as f:
-#     data = json.load(f)
-
 sqlite_TTSQL = execute_llm_queries(db_path, normalized_TTSQL)
 
-write_file(sqlite_TTSQL, "json/book_1/book_1_TTSQL/book1_sqlite_response.json")
+write_file(sqlite_TTSQL, "json/book_1/book_1_TTSQL_fewshot/book1_sqlite_response.json")
 ###########################################################################
 
 
@@ -68,7 +56,7 @@ write_file(sqlite_TTSQL, "json/book_1/book_1_TTSQL/book1_sqlite_response.json")
 # # - Normalize the SQL queries in the annotations.json file to create a clean ground truth for evaluation.
 ground_truth = normalize_ground_truth(file_path)
 
-write_file(ground_truth, "json/book_1/book1_ground_truth.json")
+write_file(ground_truth, "json/book_1/book_1_ground_truth.json")
 #################################################################################################################
 
 #################################################################################################################
@@ -84,7 +72,7 @@ for item in ground_truth:
 
 sqlite_ground_truth = execute_ground_truth_queries(db_path, queries)
 
-write_file(sqlite_ground_truth, "json/book_1/book1_ground_truth_sqlite_response.json")
+write_file(sqlite_ground_truth, "json/book_1/book_1_ground_truth_sqlite_response.json")
 ################################################################################################################
 
 
@@ -98,17 +86,13 @@ write_file(sqlite_ground_truth, "json/book_1/book1_ground_truth_sqlite_response.
 
 #############################################################################################################################################################################################################################################################
 # # - Normalize the keys of the SQL query results and reorder them according to the schema order extracted from the ground truth data, to ensure a fair comparison between the predicted results and the ground truth results.
-gt = read_file("json/book_1/book1_ground_truth_sqlite_response.json")
-data_TTSQL = read_file("json/book_1/book_1_TTSQL/book1_sqlite_response.json")
-data_QA = read_file("json/book_1/book_1_QA/book1_llm_predictions_QA.json")
+gt = read_file("json/book_1/book_1_ground_truth_sqlite_response.json")
+data_TTSQL = read_file("json/book_1/book_1_TTSQL_fewshot/book1_sqlite_response.json")
+data_QA = read_file("json/book_1/book_1_QA_fewshot/book1_llm_predictions_QA.json")
 
 ground_truth_formatted = remove_attributes_ground_truth(gt)
 TTSQL_formatted = remove_attributes(data_TTSQL)
 QA_formatted = remove_attributes(data_QA)
-
-# write_file(ground_truth_formatted, "json/book_1/book1_ground_truth_formatted.json")
-# write_file(QA_formatted, "json/book_1/book_1_QA/book1_formatted_QA.json")
-# write_file(TTSQL_formatted, "json/book_1/book_1_TTSQL/book1_formatted_TTSQL.json")
 #######################################################################################################################################################################################################################################################################
 
 #########################################################################################################################################################
@@ -116,6 +100,6 @@ QA_formatted = remove_attributes(data_QA)
 evaluation_QA = evaluate(QA_formatted, ground_truth_formatted)
 evaluation_TTSQL = evaluate(TTSQL_formatted, ground_truth_formatted)
 
-write_file(evaluation_QA, "json/book_1/book_1_QA/book1_evaluation_QA.json")
-write_file(evaluation_TTSQL, "json/book_1/book_1_TTSQL/book1_evaluation_TTSQL.json")
+write_file(evaluation_QA, "json/book_1/book_1_QA_fewshot/book1_evaluation_QA.json")
+write_file(evaluation_TTSQL, "json/book_1/book_1_TTSQL_fewshot/book1_evaluation_TTSQL.json")
 #########################################################################################################################################################
