@@ -1,0 +1,171 @@
+{
+    "examples": [
+            {
+                "question": "List the books published between 2002-01-01 and 12-31-2008",
+                "tables": [
+                    {
+                        "name": "BOOK",
+                        "columns": [
+                            {"name": "ISBN", "type": "varchar"},
+                            {"name": "TITLE", "type": "varchar"},
+                            {"name": "AUTHOR", "type": "varchar"},
+                            {"name": "PURCHASEPRICE", "type": "number(6,2)"},
+                            {"name": "SALEPRICE", "type": "number(6,2)"}
+                        ]
+                    }
+                ],
+                "answer_QA": "TITLE: varchar: Pride and Prejudice | AUTHOR: varchar: 2008\nTITLE: varchar: THE HOBBIT | AUTHOR: varchar: 2002",
+                "answer_TTSQL": "SELECT TITLE, AUTHOR FROM BOOK WHERE CAST(AUTHOR AS INT)>2001 AND CAST(AUTHOR AS INT)<2009;"
+            },
+            {
+                "question": "List the same books ordered from the most to the least expensive",
+                "tables": [
+                    {
+                        "name": "BOOK",
+                        "columns": [
+                            {"name": "ISBN", "type": "varchar"},
+                            {"name": "TITLE", "type": "varchar"},
+                            {"name": "AUTHOR", "type": "varchar"},
+                            {"name": "PURCHASEPRICE", "type": "number(6,2)"},
+                            {"name": "SALEPRICE", "type": "number(6,2)"}
+                        ]
+                    }
+                ],
+                "answer_QA": "TITLE: varchar: THE HOBBIT | AUTHOR: varchar: 2002 | SALEPRICE: number(6,2): 33.15\nTITLE: varchar: Pride and Prejudice | AUTHOR: varchar: 2008 | SALEPRICE: number(6,2): 13.45",
+                "answer_TTSQL": "SELECT TITLE, AUTHOR, SALEPRICE FROM BOOK WHERE CAST(AUTHOR AS INT)>2001 AND CAST(AUTHOR AS INT)<2009 ORDER BY SALEPRICE DESC;"
+            },
+            {
+                "question": "How much revenue was generated from the sale of each of these books?",
+                "tables": [
+                    {
+                        "name": "BOOK",
+                        "columns": [
+                            {"name": "ISBN", "type": "varchar"},
+                            {"name": "TITLE", "type": "varchar"},
+                            {"name": "AUTHOR", "type": "varchar"},
+                            {"name": "PURCHASEPRICE", "type": "number(6,2)"},
+                            {"name": "SALEPRICE", "type": "number(6,2)"}
+                        ]
+                    },
+                    {
+                        "name": "BOOKS_ORDER",
+                        "columns": [
+                            {"name": "IDORDER", "type": "varchar"},
+                            {"name": "ISBN", "type": "varchar"},
+                            {"name": "AMOUNT", "type": "number(6,2)"}
+                        ]
+                    }
+                ],
+                "answer_QA": "TITLE: varchar: Pride and Prejudice | AUTHOR: varchar: 2008 | TOTAL_SALES: number(6,2): 60.3",
+                "answer_TTSQL": "SELECT TITLE, AUTHOR, (SUM(AMOUNT*(SALEPRICE-PURCHASEPRICE))) FROM (BOOK NATURAL JOIN BOOKS_ORDER) WHERE CAST(AUTHOR AS INT)>2001 AND CAST(AUTHOR AS INT)<2009 ORDER BY SALEPRICE DESC;"
+            },
+            {
+                "question": "Total amount per order",
+                "tables": [
+                    {
+                        "name": "BOOKS_ORDER",
+                        "columns": [
+                            {"name": "IDORDER", "type": "char"},
+                            {"name": "ISBN", "type": "varchar"},
+                            {"name": "AMOUNT", "type": "number(6,2)"}
+                        ]
+                    }
+                ],
+                "answer_QA": "IDORDER: char: 0000001P | TOTAL: number(6,2): 3\nIDORDER: char: 0000002P | TOTAL: number(6,2): 1\nIDORDER: char: 0000003P | TOTAL: number(6,2): 3\nIDORDER: char: 0000004P | TOTAL: number(6,2): 1\nIDORDER: char: 0000005P | TOTAL: number(6,2): 5\nIDORDER: char: 0000006P | TOTAL: number(6,2): 5\n",
+                "answer_TTSQL": "SELECT IDORDER, SUM(AMOUNT) AS TOTAL FROM BOOKS_ORDER GROUP BY IDORDER;"
+            },
+            {
+                "question": "List of clients and the amount they ordered",
+                "tables": [
+                    {
+                        "name": "CLIENT",
+                        "columns": [
+                            {"name": "IDCLIENT", "type": "char"},
+                            {"name": "NAME", "type": "varchar"}
+                        ]
+                    },
+                    {
+                        "name": "ORDERS",
+                        "columns": [
+                            {"name": "IDORDER", "type": "char"},
+                            {"name": "IDCLIENT", "type": "char"},
+                            {"name": "DATEORDER", "type": "date"},
+                            {"name": "DATEEXPED", "type": "date"}
+                        ]
+                    },
+                    {
+                        "name": "BOOKS_ORDER",
+                        "columns": [
+                            {"name": "IDORDER", "type": "char"},
+                            {"name": "ISBN", "type": "varchar"},
+                            {"name": "AMOUNT", "type": "number(6,2)"}
+                        ]
+                    }
+                ],
+                "answer_QA": "IDCLIENT: char: 0000001 | NAME: varchar: James Smith | TOTAL: number(6,2): 4\nIDCLIENT: char: 0000002 | NAME: varchar: Laura Jones | TOTAL: number(6,2): 3\nIDCLIENT: char: 0000003 | NAME: varchar: Peter Doe | TOTAL: number(6,2): 5\nIDCLIENT: char: 0000004 | NAME: varchar: Rose Johnson | TOTAL: number(6,2): 1\nIDCLIENT: char: 0000005 | NAME: varchar: Joseph Clinton | TOTAL: number(6,2): 5",
+                "answer_TTSQL": "SELECT IDCLIENT, NAME, SUM(AMOUNT) AS TOTAL FROM BOOKS_ORDER NATURAL JOIN ORDERS NATURAL JOIN CLIENT GROUP BY IDCLIENT;"
+            },
+            {
+                "question": "List of Authors and their book",
+                "tables": [
+                    {
+                        "name": "AUTHOR",
+                        "columns": [
+                            {"name": "IDAUTHOR", "type": "char"},
+                            {"name": "NAME", "type": "varchar"}
+                        ]
+                    },
+                    {
+                        "name": "AUTHOR_BOOK",
+                        "columns": [
+                            {"name": "IDAUTHOR", "type": "char"},
+                            {"name": "ISBN", "type": "varchar"}
+                        ]
+                    },
+                    {
+                        "name": "BOOK",
+                        "columns": [
+                            {"name": "ISBN", "type": "varchar"},
+                            {"name": "TITLE", "type": "varchar"},
+                            {"name": "AUTHOR", "type": "varchar"},
+                            {"name": "PURCHASEPRICE", "type": "number(6,2)"},
+                            {"name": "SALEPRICE", "type": "number(6,2)"}
+                        ]
+                    }
+                ],
+                "answer_QA": "NAME: varchar: Jane Austin | TITLE: varchar: Pride and Prejudice\nNAME: varchar: George Orwell | TITLE: varchar: 1984\nNAME: varchar: J.R.R Tolkien | TITLE: varchar: The Hobbit\nNAME: varchar: Antoine de Saint-Exupy | TITLE: varchar: The Little Prince\nNAME: varchar: Bram Stoker | TITLE: varchar: Dracula\nNAME: varchar: Plato | TITLE: varchar: The Republic\nNAME: varchar: Vladimir Nabokov | TITLE: varchar: Lolita",
+                "answer_TTSQL": "SELECT NAME, TITLE FROM (AUTHOR JOIN AUTHOR_BOOK ON AUTHOR.IDAUTHOR = AUTHOR_BOOK.AUTHOR) JOIN BOOK ON BOOK.ISBN=AUTHOR_BOOK.ISBN;"
+            },
+            {
+                "question": "Author's of the book solt at the highest price",
+                "tables": [
+                    {
+                        "name": "AUTHOR",
+                        "columns": [
+                            {"name": "IDAUTHOR", "type": "char"},
+                            {"name": "NAME", "type": "varchar"}
+                        ]
+                    },
+                    {
+                        "name": "AUTHOR_BOOK",
+                        "columns": [
+                            {"name": "IDAUTHOR", "type": "char"},
+                            {"name": "ISBN", "type": "varchar"}
+                        ]
+                    },
+                    {
+                        "name": "BOOK",
+                        "columns": [
+                            {"name": "ISBN", "type": "varchar"},
+                            {"name": "TITLE", "type": "varchar"},
+                            {"name": "AUTHOR", "type": "varchar"},
+                            {"name": "PURCHASEPRICE", "type": "number(6,2)"},
+                            {"name": "SALEPRICE", "type": "number(6,2)"}
+                        ]
+                    }
+                ],
+                "answer_QA": "NAME: varchar: Antoine de Saint-Exupy | TITLE: varchr: The Little Prince | PRICE: number(6,2): 73.45",
+                "answer_TTSQL": "SELECT NAME, TITLE, MAX(SALEPRICE) AS PRICE FROM (AUTHOR JOIN AUTHOR_BOOK ON AUTHOR.IDAUTHOR = AUTHOR_BOOK.AUTHOR) JOIN BOOK ON BOOK.ISBN=AUTHOR_BOOK.ISBN;"
+            }
+        ] 
+}
