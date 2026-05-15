@@ -1,0 +1,66 @@
+{
+  "attributes": [
+    {
+      "table": {
+        "name": "AUTHOR",
+        "attributes_description": {
+          "idAuthor": "unique author identifier",
+          "Name": "name of the author"
+        }
+      }
+    },
+    {
+      "table": {
+        "name": "AUTHOR_BOOK",
+        "attributes_description": {
+          "ISBN": "Internationl Standard Book Number, which uniquely identifies a book edition",
+          "Author": "author identifier"
+        }
+      }
+    },
+    {
+      "table": {
+        "name": "BOOK",
+        "attributes_description": {
+          "ISBN": "Internationl Standard Book Number, which uniquely identifies a book edition",
+          "Title": "title of the book",
+          "Author": "publication year of the book",
+          "PurchasePrice": "price at which the bookstore bought the book",
+          "SalePrice": "price at which the bookstore sells the book"
+        }
+      }
+    },
+    {
+      "table": {
+        "name": "BOOKS_ORDER",
+        "attributes_description": {
+          "ISBN": "Internationl Standard Book Number, which uniquely identifies a book edition",
+          "IdOrder": "unique order identifier",
+          "amount": "number of books ordered"
+        }
+      }
+    },
+    {
+      "table": {
+        "name": "CLIENT",
+        "attributes_description": {
+          "idClient": "unique client identifier",
+          "Name": "name of the client",
+          "Address": "address of the client",
+          "NumCC": "credit card number of the client"
+        }
+      }
+    },
+    {
+      "table": {
+        "name": "ORDERS",
+        "attributes_description": {
+          "IdOrder": "unique order identifier",
+          "idClient": "client identifier",
+          "DateOrder": "date in which the order was placed (could contain NULL values)",
+          "DateExped": "date in which the order was sent (could contain NULL values)"
+        }
+      }
+    }
+  ]
+}

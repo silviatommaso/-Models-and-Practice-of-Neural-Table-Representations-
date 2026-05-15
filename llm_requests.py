@@ -8,7 +8,8 @@ client = Groq(api_key=API_KEY)
 PAUSE_BETWEEN_MODELS = 5
 PAUSE_BETWEEN_QUERIES = 10
 
-
+USE_ATTRIBUTES = False
+USE_EXAMPLES = True
 
 # -----------------------
 # UTILS
@@ -34,7 +35,7 @@ def clean_sql(output):
 # TEXT-TO-SQL
 # -----------------------
 
-def build_messages_TSQL(nl, table_schemas, primary_keys, foreign_keys, examples):
+def build_messages_TSQL(nl, table_schemas, primary_keys, foreign_keys, examples, attributes):
     return [
         {
             "role": "system",
@@ -66,7 +67,7 @@ def build_messages_TSQL(nl, table_schemas, primary_keys, foreign_keys, examples)
 # QUESTION-ANSWER
 # -----------------------
 
-def build_messages_QA(nl, table_serialized, primary_keys, foreign_keys, examples):
+def build_messages_QA(nl, table_serialized, primary_keys, foreign_keys, examples, attributes):
     return [
         {
             "role": "system",
@@ -87,6 +88,7 @@ def build_messages_QA(nl, table_serialized, primary_keys, foreign_keys, examples
             nl: {nl}
             serialized_table: {table_serialized}
             examples: {examples}
+            attribute_description: {attributes}
             primary_keys: {primary_keys}
             foreign_keys: {foreign_keys}
             """
@@ -188,14 +190,15 @@ def prompt(input_data):
         table_serialized = item["table_serialized"]
         primary_keys = item["primary_keys"]
         foreign_keys = item["foreign_keys"]
-        examples = item["examples"]
+        examples = item["examples"] if USE_EXAMPLES else None
+        attributes = item["attribute_description"] if USE_ATTRIBUTES else None
 
-        messages_TTSQL = build_messages_TSQL(nl, table_schemas, primary_keys, foreign_keys, examples)
+        messages_TTSQL = build_messages_TSQL(nl, table_schemas, primary_keys, foreign_keys, examples, attributes)
         results_TTSQL = result_definer(messages_TTSQL, nl, tables, results_TTSQL)
 
         time.sleep(PAUSE_BETWEEN_QUERIES)
         
-        messages_QA = build_messages_QA(nl, table_serialized, primary_keys, foreign_keys, examples)   
+        messages_QA = build_messages_QA(nl, table_serialized, primary_keys, foreign_keys, examples, attributes)   
         results_QA = result_definer(messages_QA, nl, tables, results_QA)
 
         time.sleep(PAUSE_BETWEEN_QUERIES)

@@ -14,6 +14,7 @@ load_dotenv()
 file_path = os.getenv("BOOK_1_ANNOTATION_PATH")
 db_path = os.getenv("DB__BOOK_1_PATH")
 examples_path = os.getenv("BOOK_1_EXAMPLES_PATH")
+attribute_description_path = os.getenv("BOOK_1_ATTRIBUTE_DESC_PATH")
 
 
 ##########################################################################
@@ -22,22 +23,22 @@ examples_path = os.getenv("BOOK_1_EXAMPLES_PATH")
 # #       - sql
 # # - Schema extraction from schema.sql 
 
-# queries = parse_annotations(file_path, db_path, examples_path)
+queries = parse_annotations(file_path, db_path, examples_path, attribute_description_path)
 
-# write_file(queries, "json/book_1/book1_queries.json")
+write_file(queries, "json/book_1/book1_queries.json")
 ##########################################################################
 
 ##########################################################################
 # # - Prompt LLM for SQL query generation:
-# llm_TTSQL, llm_QA = prompt(queries)
+llm_TTSQL, llm_QA = prompt(queries)
 ##########################################################################
 
 ##########################################################################
 # # - Response normalization 
-# normalized_QA, normalized_TTSQL = normalize(llm_QA, llm_TTSQL)
+normalized_QA, normalized_TTSQL = normalize(llm_QA, llm_TTSQL)
 
-# write_file(normalized_QA, "json/book_1/book_1_QA_fewshot/book1_llm_predictions_QA.json")
-# write_file(normalized_TTSQL, "json/book_1/book_1_TTSQL_fewshot/book1_llm_predictions_TTSQL.json")
+write_file(normalized_QA, "json/book_1/book_1_QA_fewshot/book1_llm_predictions_QA.json")
+write_file(normalized_TTSQL, "json/book_1/book_1_TTSQL_fewshot/book1_llm_predictions_TTSQL.json")
 ########################################################################
 
 ##########################################################################
@@ -92,7 +93,7 @@ write_file(sqlite_ground_truth, "json/book_1/book_1_ground_truth_sqlite_response
 # # - Normalize the keys of the SQL query results and reorder them according to the schema order extracted from the ground truth data, to ensure a fair comparison between the predicted results and the ground truth results.
 gt = read_file("json/book_1/book_1_ground_truth_sqlite_response.json")
 data_TTSQL = read_file("json/book_1/book_1_TTSQL_fewshot/book1_sqlite_response.json")
-data_QA = read_file("json/book_1/book_1_QA_fewshot_attributeDescription/book1_llm_predictions_QA.json")
+data_QA = read_file("json/book_1/book_1_QA_fewshot/book1_llm_predictions_QA.json")
 
 ground_truth_formatted = remove_attributes_ground_truth(gt)
 TTSQL_formatted = remove_attributes(data_TTSQL)
@@ -104,6 +105,6 @@ QA_formatted = remove_attributes(data_QA)
 evaluation_QA = evaluate(QA_formatted, ground_truth_formatted)
 evaluation_TTSQL = evaluate(TTSQL_formatted, ground_truth_formatted)
 
-write_file(evaluation_QA, "json/book_1/book_1_QA_fewshot_attributeDescription/book1_evaluation_QA.json")
+write_file(evaluation_QA, "json/book_1/book_1_QA_fewshot/book1_evaluation_QA.json")
 write_file(evaluation_TTSQL, "json/book_1/book_1_TTSQL_fewshot/book1_evaluation_TTSQL.json")
 #########################################################################################################################################################
