@@ -152,6 +152,7 @@ __pycache__/
 config.py
 json/
 json_QA/
+results_analysis/
 # .envrc
 # .venv
 # env/
