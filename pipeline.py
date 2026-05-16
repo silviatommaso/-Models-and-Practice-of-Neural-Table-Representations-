@@ -31,6 +31,9 @@ write_file(queries, "json/book_1/book1_queries.json")
 ##########################################################################
 # # - Prompt LLM for SQL query generation:
 llm_TTSQL, llm_QA = prompt(queries)
+
+write_file(llm_QA, "json/book_1/book_1_QA_fewshot/book1_llm_QA.json")
+write_file(llm_TTSQL, "json/book_1/book_1_TTSQL_fewshot/book1_llm_TTSQL.json")
 ##########################################################################
 
 ##########################################################################
