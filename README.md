@@ -68,8 +68,8 @@ both set to False → zero-shot prompting
 If token-per-minute rate limits occur, increase the pause intervals in llm_requests.py by modifying:
 
 ```python
-PAUSE_BETWEEN_MODELS = True | False
-PAUSE_BETWEEN_QUERIES = True | False
+PAUSE_BETWEEN_MODELS 
+PAUSE_BETWEEN_QUERIES 
 ```
 Increasing these values adds a longer delay between API requests and helps avoid rate-limit errors.
 
