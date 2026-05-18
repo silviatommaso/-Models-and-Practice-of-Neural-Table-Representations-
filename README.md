@@ -89,7 +89,6 @@ This ensures that results from different experimental settings (zero-shot, few-s
 This project makes use of the following resources:
 
 - **Spider dataset**: https://yale-lily.github.io/spider
-- **Groq API**: https://groq.com/
 
 We thank the creators of these resources for their contributions to research and benchmarking in this field.
 
