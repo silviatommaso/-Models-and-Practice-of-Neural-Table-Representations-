@@ -92,3 +92,7 @@ This project makes use of the following resources:
 - **Groq API**: https://groq.com/
 
 We thank the creators of these resources for their contributions to research and benchmarking in this field.
+
+## Contact
+
+Silvia Tommaso - https://www.linkedin.com/in/silvia-tommaso-9476a2398/ - silvia.tommaso18112002@gmail.com
